@@ -1,0 +1,2757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Prosperity Playbook — Ministry Financial Strategy · 2026 Edition</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0C0B09;
+      --bg2:      #141210;
+      --bg3:      #1C1A16;
+      --gold:     #C4A35A;
+      --gold2:    #D4B870;
+      --cream:    #F0EBE1;
+      --cream2:   #E4DDD2;
+      --white:    #FFFFFF;
+      --on-dark:  #E8E3DA;
+      --muted:    #7A7468;
+      --on-light: #18140F;
+      --muted-l:  #6A6058;
+      --r-card:   20px;
+      --r-section:48px;
+      --r-pill:   100px;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--on-dark); font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    /* ── SCREENS ── */
+    .screen { display: none !important; min-height: 100vh; }
+    .screen.active { display: block !important; }
+    #screen-complete.active { display: flex !important; }
+
+    /* ── BREADCRUMB BAR (inner screens only) ── */
+    .bar { display: none; } /* hidden by default */
+    .survey-screen .bar, .config-screen .bar, .results-screen .bar,
+    .module-screen .bar, .traits-screen .bar, .complete-screen .bar {
+      display: block;
+      background: var(--bg2);
+      text-align: center;
+      padding: 8px 24px;
+      font-size: 10px; letter-spacing: .18em; color: var(--muted); font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+    }
+    .bar span { margin: 0 8px; }
+    .bar .dot { color: var(--gold); }
+
+    /* ── NAV ── */
+    nav { position: sticky; top: 0; z-index: 100; padding: 0 56px; }
+    #screen-landing nav { position: fixed; left: 0; right: 0; background: transparent; border-bottom: 1px solid rgba(255,255,255,.1); }
+    .survey-screen nav, .config-screen nav, .results-screen nav, .module-screen nav,
+    .traits-screen nav, .complete-screen nav { background: var(--bg); border-bottom: 1px solid rgba(255,255,255,.06); }
+    .nav-inner { max-width: 1200px; margin: 0 auto; height: 68px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--white); cursor: pointer; }
+    .nav-logo em { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-style: italic; font-weight: 300; font-size: 1.35em; text-transform: none; letter-spacing: 0; }
+    .nav-links { display: flex; align-items: center; gap: 28px; flex-wrap: nowrap; }
+    .nav-links a { font-size: 13px; color: rgba(255,255,255,.6); text-decoration: none; transition: color .2s; white-space: nowrap; }
+    .nav-links a:hover { color: var(--white); }
+    .btn-nav { font-size: 13px; font-weight: 500; border: 1.5px solid rgba(255,255,255,.35); color: var(--white); background: transparent; padding: 9px 24px; cursor: pointer; border-radius: var(--r-pill); transition: background .2s; }
+    .btn-nav:hover { background: rgba(255,255,255,.1); }
+
+    /* ── HERO ── */
+    .hero {
+      background: #0c0b09;
+      min-height: 94vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr auto;
+      padding-top: 68px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Left: text content, pushed to bottom */
+    .hero-inner {
+      grid-column: 1;
+      grid-row: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 48px 56px 56px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Right: video panel */
+    .hero-video-panel {
+      grid-column: 2;
+      grid-row: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-video-panel video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* Fade at the bottom of the video into the page background */
+    .hero-video-panel::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top,  #0c0b09 0%, transparent 35%),
+        linear-gradient(to right, #0c0b09 0%, transparent 18%);
+    }
+
+    /* Stats row — full width at the bottom */
+    .hero-stats-row {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      padding: 0 56px 72px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ── GLITCH FLASH OVERLAY ── */
+    .glitch-flash { position: absolute; inset: 0; z-index: 3; opacity: 0; background-size: cover; background-position: center; pointer-events: none; }
+
+    /* ── GLITCH ANIMATION ── */
+    @keyframes glitch-jitter {
+      0%   { transform: translate(0,0) skewX(0deg); filter: none; }
+      10%  { transform: translate(-5px, 2px) skewX(-2deg); filter: hue-rotate(90deg) saturate(3) brightness(1.4); }
+      20%  { transform: translate(5px, -3px) skewX(2deg); filter: hue-rotate(-90deg) contrast(2); }
+      30%  { transform: translate(-3px, 4px); filter: brightness(2.5) contrast(1.5); }
+      40%  { transform: translate(4px, -2px) skewX(-1deg); filter: hue-rotate(180deg) saturate(2); }
+      50%  { transform: translate(-1px, 1px); filter: invert(0.15); }
+      60%  { transform: translate(-6px, 2px) skewX(3deg); filter: hue-rotate(45deg) saturate(3); }
+      70%  { transform: translate(6px, -4px); filter: contrast(3) brightness(1.3); }
+      80%  { transform: translate(-3px, 5px) skewX(-2deg); filter: hue-rotate(270deg); }
+      90%  { transform: translate(3px, -2px); filter: saturate(0) brightness(2); }
+      100% { transform: translate(0,0) skewX(0deg); filter: none; }
+    }
+    @keyframes scanlines {
+      0%   { background-position: 0 0; }
+      100% { background-position: 0 80px; }
+    }
+    .hero.glitching { animation: glitch-jitter 0.07s steps(1) infinite; }
+    .hero.glitching::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      background: repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0px, rgba(0,0,0,.18) 1px, transparent 1px, transparent 4px);
+      animation: scanlines 0.09s linear infinite;
+      pointer-events: none;
+    }
+    .hero-label { font-size: 11px; letter-spacing: .22em; color: var(--muted); font-weight: 500; margin-bottom: 24px; text-transform: uppercase; }
+    .hero h1 { font-family: 'Inter', sans-serif; font-size: 96px; font-weight: 800; line-height: .92; color: var(--white); text-transform: uppercase; letter-spacing: -.025em; margin-bottom: 28px; }
+    .hero h1 em { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: 1.06em; text-transform: none; color: var(--gold); letter-spacing: 0; }
+    .hero-tagline { font-size: 15px; color: rgba(255,255,255,.45); line-height: 1.75; max-width: 440px; margin-bottom: 40px; font-weight: 300; }
+    .hero-ctas { display: flex; gap: 14px; margin-bottom: 0; }
+    .btn-primary { background: var(--gold); color: var(--bg); font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; padding: 14px 36px; border: none; cursor: pointer; border-radius: var(--r-pill); transition: background .2s, transform .15s; }
+    .btn-primary:hover { background: var(--gold2); transform: translateY(-1px); }
+    .btn-ghost { background: transparent; color: rgba(255,255,255,.65); font-family: 'Inter', sans-serif; font-size: 14px; padding: 14px 36px; border: 1.5px solid rgba(255,255,255,.2); cursor: pointer; border-radius: var(--r-pill); transition: border-color .2s, color .2s; }
+    .btn-ghost:hover { border-color: rgba(255,255,255,.5); color: var(--white); }
+
+    /* ── STATS ── */
+    .stats { display: grid; grid-template-columns: repeat(4,1fr); border-top: 1px solid rgba(255,255,255,.08); width: 100%; }
+    .stat { padding: 24px 0; padding-right: 32px; }
+    .stat-val { font-family: 'Inter', sans-serif; font-size: 38px; font-weight: 700; color: var(--gold); margin-bottom: 6px; letter-spacing: -.02em; }
+    .stat-label { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+    /* ── SECTION TRANSITION HELPER ── */
+    .light-section { background: var(--cream); border-radius: var(--r-section) var(--r-section) 0 0; margin-top: calc(-1 * var(--r-section)); }
+
+    /* ── SUBNAV ── */
+    .subnav { background: var(--cream); padding: 0 56px; }
+    .subnav-inner { max-width: 1200px; margin: 0 auto; display: flex; }
+    .subnav a { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-l); text-decoration: none; font-weight: 600; padding: 14px 18px; display: block; border-bottom: 2px solid transparent; transition: color .2s, border-color .2s; }
+    .subnav a:hover, .subnav a.active { color: var(--on-light); border-bottom-color: var(--gold); }
+
+    /* ── INTRO ── */
+    .intro { background: var(--cream); border-radius: var(--r-section) var(--r-section) 0 0; padding: 88px 56px; }
+    .intro-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 88px; align-items: start; }
+    .section-label { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted-l); margin-bottom: 18px; font-weight: 600; }
+    .intro h2 { font-family: 'Inter', sans-serif; font-size: 40px; font-weight: 800; color: var(--on-light); line-height: 1.0; margin-bottom: 28px; text-transform: uppercase; letter-spacing: -.02em; }
+    .intro h2 em { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: 1.05em; text-transform: none; color: var(--gold); display: block; letter-spacing: 0; }
+    .intro p { font-size: 14px; color: var(--muted-l); line-height: 1.85; margin-bottom: 16px; }
+    .intro p strong { color: var(--on-light); }
+    .intro-bullets { list-style: none; margin-top: 24px; }
+    .intro-bullets li { display: flex; gap: 14px; margin-bottom: 14px; align-items: flex-start; font-size: 15px; color: var(--muted-l); line-height: 1.65; }
+    .intro-bullets li strong { color: var(--on-light); display: block; margin-bottom: 2px; }
+    .bullet-mark { color: var(--gold); font-size: 16px; line-height: 1.4; flex-shrink: 0; }
+    .landscape-card { background: var(--on-light); border-radius: var(--r-card); padding: 32px; }
+    .landscape-title { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; font-weight: 500; }
+    .lc-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,.05); gap: 20px; }
+    .lc-row:last-child { border-bottom: none; }
+    .lc-val { font-family: 'Inter', sans-serif; font-size: 28px; font-weight: 700; color: var(--gold); flex-shrink: 0; letter-spacing: -.02em; }
+    .lc-desc { font-size: 12px; color: var(--muted); line-height: 1.6; text-align: right; }
+
+    /* ── MODULES ── */
+    .modules-section { background: var(--cream); padding: 80px 56px 96px; }
+    .modules-inner { max-width: 1200px; margin: 0 auto; }
+    .modules-section h2 { font-family: 'Inter', sans-serif; font-size: 40px; font-weight: 800; color: var(--on-light); margin-bottom: 40px; text-transform: uppercase; letter-spacing: -.02em; }
+    .modules-section h2 em { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: 1.05em; text-transform: none; color: var(--gold); }
+    .module-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    .module-card { background: var(--on-light); padding: 28px; border-radius: var(--r-card); cursor: pointer; transition: transform .25s, box-shadow .25s; overflow: hidden; }
+    .module-card:hover { transform: translateY(-4px); box-shadow: 0 24px 56px rgba(0,0,0,.35); }
+    .mc-image { height: 120px; margin: -28px -28px 22px; border-radius: var(--r-card) var(--r-card) 0 0; overflow: hidden; }
+    .mc-image-inner { width: 100%; height: 100%; background-size: cover; opacity: .85; }
+    .mc-tag { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; font-weight: 500; }
+    .mc-num { font-family: 'Cormorant Garamond', serif; font-size: 13px; color: var(--gold); margin-bottom: 6px; }
+    .mc-title { font-size: 15px; font-weight: 700; color: var(--on-dark); margin-bottom: 10px; line-height: 1.25; }
+    .mc-desc { font-size: 12px; color: var(--muted); line-height: 1.7; }
+    .mc-footer { margin-top: 20px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.06); display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); letter-spacing: .06em; font-weight: 500; }
+    .mc-arrow { color: var(--gold); }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials { background: var(--bg); padding: 88px 56px; }
+    .testimonials-inner { max-width: 1200px; margin: 0 auto; }
+    .testimonials h2 { font-family: 'Inter', sans-serif; font-size: 40px; font-weight: 800; color: var(--white); margin-bottom: 44px; text-transform: uppercase; letter-spacing: -.02em; }
+    .testimonials h2 em { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: 1.05em; text-transform: none; color: var(--gold); }
+    .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    .testi-card { background: var(--bg2); padding: 28px 24px; border-radius: var(--r-card); border: 1px solid rgba(255,255,255,.04); }
+    .testi-num { font-size: 9px; letter-spacing: .18em; color: var(--muted); margin-bottom: 16px; font-weight: 600; text-transform: uppercase; }
+    .testi-quote { font-family: 'Cormorant Garamond', serif; font-size: 16px; color: var(--on-dark); line-height: 1.75; font-style: italic; margin-bottom: 20px; }
+    .testi-name { font-size: 12px; font-weight: 600; color: var(--on-dark); margin-bottom: 3px; }
+    .testi-cohort { font-size: 11px; color: var(--muted); }
+
+    /* ── CTA ── */
+    .cta-section { background: var(--cream); padding: 96px 56px; text-align: center; border-radius: var(--r-section) var(--r-section) 0 0; }
+    .cta-section h2 { font-family: 'Inter', sans-serif; font-size: 48px; font-weight: 800; color: var(--on-light); margin-bottom: 16px; text-transform: uppercase; letter-spacing: -.025em; line-height: .95; }
+    .cta-section h2 em { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: 1.05em; text-transform: none; color: var(--gold); }
+    .cta-section p { font-size: 14px; color: var(--muted-l); margin-bottom: 36px; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--bg2); padding: 56px 56px 32px; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 64px; margin-bottom: 40px; }
+    .footer-brand { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--on-dark); margin-bottom: 12px; }
+    .footer-brand em { color: var(--gold); font-style: italic; }
+    .footer-text { font-size: 12px; color: var(--muted); line-height: 1.8; }
+    .footer-col h4 { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; font-weight: 600; }
+    .footer-col a { display: block; font-size: 13px; color: rgba(255,255,255,.35); text-decoration: none; margin-bottom: 10px; transition: color .2s; }
+    .footer-col a:hover { color: var(--on-dark); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,.06); padding-top: 24px; font-size: 11px; color: var(--muted); }
+
+    /* ── SURVEY ── */
+    .survey-screen { background: var(--bg); min-height: 100vh; }
+    .survey-container { max-width: 660px; margin: 0 auto; padding: 72px 48px; }
+    .survey-header { margin-bottom: 52px; }
+    .survey-breadcrumb { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; font-weight: 500; }
+    .survey-header h2 { font-family: 'Inter', sans-serif; font-size: 36px; font-weight: 800; color: var(--white); margin-bottom: 16px; line-height: 1.1; text-transform: uppercase; letter-spacing: -.02em; }
+    .survey-header h2 em { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: 1.05em; text-transform: none; letter-spacing: 0; }
+    .survey-header p { font-size: 13px; color: var(--muted); line-height: 1.8; }
+    .progress-bar { height: 2px; background: rgba(255,255,255,.08); margin: 32px 0 8px; border-radius: 2px; }
+    .progress-fill { height: 100%; background: var(--gold); transition: width .4s ease; border-radius: 2px; }
+    .progress-label { font-size: 10px; color: var(--muted); letter-spacing: .1em; text-align: right; }
+    .question-block { display: none; }
+    .question-block.active { display: block; }
+    .q-label { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; font-weight: 600; }
+    .q-text { font-size: 22px; font-weight: 600; color: var(--white); margin-bottom: 32px; line-height: 1.4; }
+    .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 36px; }
+    .option { background: rgba(255,255,255,.03); border: 1.5px solid rgba(255,255,255,.08); border-radius: 14px; padding: 18px 22px; cursor: pointer; display: flex; align-items: flex-start; gap: 16px; transition: border-color .2s, background .2s; font-size: 13px; color: var(--on-dark); line-height: 1.6; }
+    .option:hover { border-color: rgba(196,163,90,.3); background: rgba(196,163,90,.04); }
+    .option.selected { border-color: var(--gold); background: rgba(196,163,90,.07); }
+    .option-letter { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: var(--muted); flex-shrink: 0; margin-top: 1px; transition: border-color .2s, color .2s, background .2s; }
+    .option.selected .option-letter { border-color: var(--gold); color: var(--gold); background: rgba(196,163,90,.1); }
+    .btn-next { background: var(--gold); color: var(--bg); font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; padding: 14px 40px; border: none; cursor: pointer; border-radius: var(--r-pill); opacity: .3; pointer-events: none; transition: opacity .2s, transform .15s; }
+    .btn-next.ready { opacity: 1; pointer-events: all; }
+    .btn-next.ready:hover { transform: translateY(-1px); }
+
+    /* ── RESULTS ── */
+    .results-screen { background: var(--bg); min-height: 100vh; padding: 64px 48px; }
+    .results-inner { max-width: 840px; margin: 0 auto; }
+    .results-badge { display: inline-block; background: rgba(196,163,90,.1); border: 1.5px solid rgba(196,163,90,.3); border-radius: var(--r-pill); padding: 7px 18px; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); margin-bottom: 24px; font-weight: 600; }
+    .results-screen h2 { font-family: 'Inter', sans-serif; font-size: 50px; font-weight: 800; color: var(--white); margin-bottom: 16px; line-height: 1.0; text-transform: uppercase; letter-spacing: -.025em; }
+    .results-screen h2 em { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: 1.05em; text-transform: none; color: var(--gold); }
+    .results-screen > .results-inner > p { font-size: 14px; color: var(--muted); line-height: 1.8; max-width: 520px; margin-bottom: 48px; }
+    .profile-section { margin-bottom: 44px; }
+    .profile-section h3 { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; font-weight: 600; }
+    .profile-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+    .profile-stat { background: var(--bg2); border-radius: var(--r-card); border: 1px solid rgba(255,255,255,.05); padding: 22px 26px; display: flex; justify-content: space-between; align-items: center; }
+    .ps-label { font-size: 12px; color: var(--on-dark); font-weight: 500; }
+    .ps-label small { display: block; font-size: 10px; color: var(--muted); margin-top: 3px; font-weight: 400; }
+    .ps-score { font-family: 'Inter', sans-serif; font-size: 32px; color: var(--gold); font-weight: 700; letter-spacing: -.02em; }
+    .ps-check { color: var(--gold); font-size: 13px; margin-left: 4px; }
+    .dashboard-header { margin-bottom: 16px; }
+    .dashboard-header h3 { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; font-weight: 600; }
+    .dashboard-header p { font-size: 13px; color: var(--muted); }
+    .module-list { display: flex; flex-direction: column; gap: 8px; }
+    .module-row { background: var(--bg2); border-radius: var(--r-card); border: 1px solid rgba(255,255,255,.05); padding: 20px 24px; display: flex; align-items: center; gap: 20px; cursor: pointer; transition: border-color .2s, opacity .2s, transform .15s; }
+    .module-row.locked { opacity: .38; cursor: not-allowed; pointer-events: none; }
+    .module-row:not(.locked):hover { border-color: rgba(196,163,90,.25); transform: translateX(4px); }
+    .module-row.completed { opacity: .6; }
+    .mr-num { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--gold); font-weight: 300; flex-shrink: 0; width: 32px; }
+    .mr-body { flex: 1; }
+    .mr-title { font-size: 14px; color: var(--on-dark); font-weight: 600; margin-bottom: 3px; }
+    .mr-subtitle { font-size: 11px; color: var(--muted); }
+    .mr-status { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; flex-shrink: 0; font-weight: 600; }
+    .mr-status.open { color: var(--gold); }
+    .mr-status.locked { color: rgba(255,255,255,.18); }
+    .mr-status.done { color: rgba(255,255,255,.25); }
+
+    /* ── MODULE SCREENS ── */
+    .module-screen { background: var(--bg); min-height: 100vh; }
+    .module-hero { background: var(--bg2); padding: 72px 56px; border-bottom: 1px solid rgba(255,255,255,.05); }
+    .module-hero-inner { max-width: 840px; margin: 0 auto; }
+    .module-tag { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; font-weight: 500; }
+    .module-num-label { font-family: 'Cormorant Garamond', serif; font-size: 14px; color: var(--gold); margin-bottom: 14px; }
+    .module-screen h1 { font-family: 'Inter', sans-serif; font-size: 58px; font-weight: 800; color: var(--white); line-height: 1.0; margin-bottom: 16px; text-transform: uppercase; letter-spacing: -.025em; }
+    .module-screen h1 em { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: 1.06em; text-transform: none; color: var(--gold); letter-spacing: 0; }
+    .module-tagline { font-size: 14px; color: var(--muted); font-style: italic; }
+    .module-progress { display: flex; gap: 8px; margin-top: 32px; }
+    .mp-dot { height: 3px; flex: 1; border-radius: 3px; background: rgba(255,255,255,.1); }
+    .mp-dot.done { background: var(--gold); }
+    .mp-dot.active { background: var(--gold2); }
+    .module-body { max-width: 840px; margin: 0 auto; padding: 64px 56px; }
+    .content-section { margin-bottom: 48px; }
+    .content-section h2 { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,.07); letter-spacing: -.01em; }
+    .content-section p { font-size: 14px; color: rgba(255,255,255,.5); line-height: 1.9; margin-bottom: 16px; }
+    .content-section p strong { color: var(--on-dark); }
+    .provision-block { background: var(--bg2); border-radius: 14px; border: 1px solid rgba(255,255,255,.05); padding: 22px 26px; margin-bottom: 10px; }
+    .provision-title { font-size: 13px; font-weight: 700; color: var(--on-dark); margin-bottom: 8px; }
+    .provision-text { font-size: 13px; color: var(--muted); line-height: 1.75; }
+    .callout { border-left: 3px solid var(--gold); border-radius: 0 14px 14px 0; padding: 22px 28px; background: rgba(196,163,90,.05); margin: 32px 0; font-family: 'Cormorant Garamond', serif; font-size: 21px; color: var(--on-dark); font-style: italic; line-height: 1.6; }
+    .callout cite { display: block; margin-top: 12px; font-family: 'Inter', sans-serif; font-size: 11px; color: var(--muted); font-style: normal; letter-spacing: .06em; font-weight: 500; }
+    .module-cta-section { background: var(--cream); padding: 56px; text-align: center; }
+    .module-cta-inner { max-width: 520px; margin: 0 auto; }
+    .module-cta-section p { font-size: 14px; color: var(--muted-l); margin-bottom: 28px; }
+
+    /* ── COMPLETE ── */
+    .complete-screen { background: var(--bg); min-height: 100vh; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 48px; }
+    .complete-screen .c-label { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin-bottom: 28px; font-weight: 600; }
+    .complete-screen h1 { font-family: 'Inter', sans-serif; font-size: 76px; font-weight: 800; color: var(--white); margin-bottom: 24px; line-height: .95; text-transform: uppercase; letter-spacing: -.03em; }
+    .complete-screen h1 em { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: 1.06em; text-transform: none; color: var(--gold); letter-spacing: 0; }
+    .complete-screen .c-body { font-size: 14px; color: var(--muted); line-height: 1.9; max-width: 460px; margin: 0 auto 44px; }
+    .complete-screen .c-body p { margin-bottom: 16px; }
+    .complete-line { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 20px; color: rgba(255,255,255,.3); padding: 24px 40px; margin: 40px 0; max-width: 500px; border-radius: var(--r-card); background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06); }
+
+    /* ── TRAITS ── */
+    .traits-screen { background: var(--bg); min-height: 100vh; padding: 64px 48px 80px; }
+    .traits-inner { max-width: 620px; margin: 0 auto; }
+    .traits-screen .t-label { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; font-weight: 600; }
+    .traits-screen h2 { font-family: 'Inter', sans-serif; font-size: 44px; font-weight: 800; color: var(--white); margin-bottom: 12px; line-height: 1.0; text-transform: uppercase; letter-spacing: -.025em; }
+    .traits-screen h2 em { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: 1.05em; text-transform: none; color: var(--gold); }
+    .traits-screen .t-sub { font-size: 13px; color: var(--muted); margin-bottom: 40px; }
+    .traits-card { background: var(--cream); border-radius: var(--r-card); padding: 32px 32px 24px; margin-bottom: 24px; }
+    .traits-card-title { font-size: 13px; font-weight: 700; color: var(--on-light); margin-bottom: 28px; }
+    .trait-row { margin-bottom: 26px; }
+    .trait-row:last-child { margin-bottom: 0; }
+    .trait-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+    .trait-name { font-size: 14px; color: var(--on-light); font-weight: 500; }
+    .trait-score { font-size: 14px; color: var(--on-light); }
+    .trait-score strong { font-weight: 700; }
+    .trait-bar-track { height: 14px; border-radius: 20px; position: relative; overflow: visible; margin-bottom: 8px; }
+    .trait-bar-fill { height: 100%; border-radius: 20px; width: 0%; transition: width 1.1s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+    .trait-dot { width: 22px; height: 22px; border-radius: 50%; background: var(--white); border: 3px solid var(--white); box-shadow: 0 1px 6px rgba(0,0,0,.3); position: absolute; right: -11px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+    .trait-extremes { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted-l); }
+    .traits-meta { font-size: 11px; color: var(--muted-l); padding-top: 16px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(0,0,0,.1); }
+
+    /* ── CONFIGURATOR ── */
+    .config-screen { background: var(--bg); min-height: 100vh; }
+    .config-layout { max-width: 1200px; margin: 0 auto; padding: 48px 56px 80px; display: grid; grid-template-columns: 1fr 320px; gap: 56px; align-items: start; }
+    .config-main { min-width: 0; }
+    .config-sidebar { position: sticky; top: 120px; }
+    .config-progress { display: flex; gap: 4px; margin-bottom: 40px; }
+    .config-progress-step { flex: 1; height: 3px; border-radius: 3px; background: rgba(255,255,255,.08); transition: background .4s; }
+    .config-progress-step.done { background: var(--gold); }
+    .config-progress-step.active { background: var(--gold2); }
+    .config-step-label { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; font-weight: 500; }
+    .config-main h2 { font-family: 'Inter', sans-serif; font-size: 36px; font-weight: 800; color: var(--white); margin-bottom: 10px; line-height: 1.05; text-transform: uppercase; letter-spacing: -.02em; }
+    .config-main h2 em { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: 1.05em; text-transform: none; color: var(--gold); letter-spacing: 0; }
+    .config-main .config-desc { font-size: 13px; color: var(--muted); line-height: 1.8; margin-bottom: 36px; max-width: 520px; }
+    .config-step { display: none; }
+    .config-step.active { display: block; }
+
+    /* Org Structure Cards */
+    .org-cards { display: flex; flex-direction: column; gap: 12px; }
+    .org-card { background: var(--bg2); border: 1.5px solid rgba(255,255,255,.06); border-radius: 16px; padding: 28px 28px 24px; cursor: pointer; transition: border-color .25s, background .25s, transform .15s; }
+    .org-card:hover { border-color: rgba(196,163,90,.25); transform: translateX(4px); }
+    .org-card.selected { border-color: var(--gold); background: rgba(196,163,90,.04); }
+    .org-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+    .org-card-title { font-size: 16px; font-weight: 700; color: var(--on-dark); }
+    .org-card-badge { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; padding: 5px 12px; border-radius: var(--r-pill); font-weight: 600; }
+    .org-card-badge.standard { color: var(--muted); border: 1px solid rgba(255,255,255,.1); }
+    .org-card-badge.recommended { color: var(--gold); border: 1px solid rgba(196,163,90,.3); background: rgba(196,163,90,.08); }
+    .org-card-badge.advanced { color: var(--gold); border: 1px solid rgba(196,163,90,.4); background: rgba(196,163,90,.12); }
+    .org-card-desc { font-size: 12px; color: var(--muted); line-height: 1.75; margin-bottom: 16px; }
+    .org-card-features { display: flex; flex-wrap: wrap; gap: 6px; }
+    .org-feature { font-size: 10px; padding: 5px 12px; border-radius: var(--r-pill); letter-spacing: .04em; font-weight: 500; }
+    .org-feature.on { color: var(--gold); background: rgba(196,163,90,.08); border: 1px solid rgba(196,163,90,.2); }
+    .org-feature.off { color: rgba(255,255,255,.2); background: rgba(255,255,255,.02); border: 1px solid rgba(255,255,255,.05); text-decoration: line-through; }
+
+    /* Compensation Sliders */
+    .comp-section { margin-bottom: 28px; }
+    .comp-section-title { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; font-weight: 600; }
+    .comp-slider-row { margin-bottom: 24px; }
+    .comp-slider-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+    .comp-slider-name { font-size: 13px; color: var(--on-dark); font-weight: 500; }
+    .comp-slider-value { font-family: 'Inter', sans-serif; font-size: 15px; color: var(--gold); font-weight: 700; letter-spacing: -.01em; }
+    .comp-slider { -webkit-appearance: none; width: 100%; height: 4px; border-radius: 4px; background: rgba(255,255,255,.1); outline: none; transition: background .2s; }
+    .comp-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--gold); cursor: pointer; border: 3px solid var(--white); box-shadow: 0 2px 8px rgba(0,0,0,.4); }
+    .comp-slider::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: var(--gold); cursor: pointer; border: 3px solid var(--white); box-shadow: 0 2px 8px rgba(0,0,0,.4); }
+
+    .comp-toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,.05); }
+    .comp-toggle-row:last-child { border-bottom: none; }
+    .comp-toggle-info { flex: 1; }
+    .comp-toggle-name { font-size: 13px; color: var(--on-dark); font-weight: 500; margin-bottom: 3px; }
+    .comp-toggle-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+    .toggle-switch { position: relative; width: 44px; height: 24px; flex-shrink: 0; margin-left: 20px; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-track { position: absolute; inset: 0; background: rgba(255,255,255,.1); border-radius: 24px; cursor: pointer; transition: background .25s; }
+    .toggle-track::after { content: ''; position: absolute; width: 18px; height: 18px; border-radius: 50%; background: var(--white); top: 3px; left: 3px; transition: transform .25s; box-shadow: 0 1px 4px rgba(0,0,0,.3); }
+    .toggle-switch input:checked + .toggle-track { background: var(--gold); }
+    .toggle-switch input:checked + .toggle-track::after { transform: translateX(20px); }
+
+    .comp-summary { background: var(--bg2); border-radius: 16px; border: 1px solid rgba(196,163,90,.15); padding: 24px 28px; margin-top: 32px; }
+    .comp-summary-row { display: flex; justify-content: space-between; align-items: baseline; padding: 8px 0; }
+    .comp-summary-label { font-size: 12px; color: var(--muted); }
+    .comp-summary-value { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: -.01em; }
+    .comp-summary-value.total { color: var(--gold); font-size: 24px; }
+    .comp-summary-value.visible { color: var(--on-dark); }
+    .comp-summary-value.hidden { color: rgba(196,163,90,.5); }
+    .comp-summary-divider { border: none; border-top: 1px solid rgba(255,255,255,.06); margin: 8px 0; }
+    .comp-summary-note { font-size: 10px; color: var(--muted); margin-top: 12px; line-height: 1.6; font-style: italic; }
+
+    /* Governance */
+    .gov-group { margin-bottom: 32px; }
+    .gov-group-title { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; font-weight: 600; }
+    .gov-options { display: flex; flex-direction: column; gap: 8px; }
+    .gov-option { background: var(--bg2); border: 1.5px solid rgba(255,255,255,.06); border-radius: 12px; padding: 16px 20px; cursor: pointer; transition: border-color .2s, background .2s; display: flex; align-items: center; gap: 14px; }
+    .gov-option:hover { border-color: rgba(196,163,90,.2); }
+    .gov-option.selected { border-color: var(--gold); background: rgba(196,163,90,.04); }
+    .gov-radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(255,255,255,.2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: border-color .2s; }
+    .gov-option.selected .gov-radio { border-color: var(--gold); }
+    .gov-radio-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); transform: scale(0); transition: transform .2s; }
+    .gov-option.selected .gov-radio-dot { transform: scale(1); }
+    .gov-option-text { font-size: 13px; color: var(--on-dark); line-height: 1.5; }
+    .gov-option-text small { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 400; }
+    .gov-bylaw-preview { background: var(--bg2); border-radius: 12px; border: 1px solid rgba(196,163,90,.12); padding: 20px 24px; margin-top: 24px; }
+    .gov-bylaw-label { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; font-weight: 600; opacity: .7; }
+    .gov-bylaw-text { font-family: 'Cormorant Garamond', serif; font-size: 15px; color: rgba(240,235,225,.35); line-height: 1.7; font-style: italic; }
+    .gov-bylaw-text .bylaw-line { display: block; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,.03); transition: color .4s; }
+    .gov-bylaw-text .bylaw-line.active { color: rgba(240,235,225,.8); }
+
+    /* Donor Framework */
+    .donor-cards { display: flex; flex-direction: column; gap: 12px; }
+    .donor-card { background: var(--bg2); border: 1.5px solid rgba(255,255,255,.06); border-radius: 16px; padding: 24px 28px; cursor: pointer; transition: border-color .25s, background .25s; }
+    .donor-card:hover { border-color: rgba(196,163,90,.2); }
+    .donor-card.selected { border-color: var(--gold); background: rgba(196,163,90,.04); }
+    .donor-card-title { font-size: 14px; font-weight: 700; color: var(--on-dark); margin-bottom: 8px; }
+    .donor-card-sample { font-family: 'Cormorant Garamond', serif; font-size: 15px; color: rgba(240,235,225,.55); font-style: italic; line-height: 1.65; padding: 12px 16px; background: rgba(255,255,255,.02); border-radius: 10px; border-left: 2px solid rgba(196,163,90,.2); margin-bottom: 12px; }
+    .donor-card.selected .donor-card-sample { border-left-color: var(--gold); color: rgba(240,235,225,.75); }
+    .donor-card-note { font-size: 10px; color: var(--muted); line-height: 1.6; }
+
+    /* Sidebar Profile Card */
+    .profile-card { background: var(--bg2); border-radius: var(--r-card); border: 1px solid rgba(255,255,255,.06); padding: 28px; }
+    .profile-card-title { font-size: 9px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; font-weight: 600; }
+    .profile-card-row { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+    .profile-card-row:last-child { border-bottom: none; }
+    .profile-card-label { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; font-weight: 500; }
+    .profile-card-value { font-size: 13px; color: var(--on-dark); font-weight: 500; transition: color .3s; }
+    .profile-card-value.empty { color: rgba(255,255,255,.15); font-style: italic; font-weight: 400; }
+    .profile-card-metric { margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.06); text-align: center; }
+    .profile-card-metric-label { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; font-weight: 600; }
+    .profile-card-metric-value { font-family: 'Inter', sans-serif; font-size: 48px; font-weight: 800; color: var(--gold); letter-spacing: -.03em; line-height: 1; transition: color .3s; }
+    .profile-card-metric-sub { font-size: 10px; color: var(--muted); margin-top: 6px; }
+    .config-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding-top: 28px; border-top: 1px solid rgba(255,255,255,.06); }
+    .btn-config-back { background: transparent; border: 1.5px solid rgba(255,255,255,.15); color: rgba(255,255,255,.5); font-family: 'Inter', sans-serif; font-size: 13px; padding: 12px 28px; border-radius: var(--r-pill); cursor: pointer; transition: border-color .2s, color .2s; }
+    .btn-config-back:hover { border-color: rgba(255,255,255,.35); color: var(--white); }
+    .btn-config-next { background: var(--gold); color: var(--bg); font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; padding: 14px 36px; border: none; cursor: pointer; border-radius: var(--r-pill); transition: background .2s, transform .15s, opacity .2s; }
+    .btn-config-next:hover { background: var(--gold2); transform: translateY(-1px); }
+    .btn-config-next.disabled { opacity: .3; pointer-events: none; }
+
+    @media (max-width: 768px) {
+      .config-layout { grid-template-columns: 1fr; gap: 32px; padding: 32px 24px 64px; }
+      .config-sidebar { position: static; order: -1; }
+    }
+
+    /* ── REVEAL MIRROR ── */
+    .reveal-mirror { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 80px 56px; text-align: center; position: relative; }
+    .reveal-mirror::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 1px; height: 80px; background: linear-gradient(to bottom, rgba(196,163,90,.3), transparent); }
+    .mirror-label { font-size: 9px; letter-spacing: .4em; text-transform: uppercase; color: rgba(196,163,90,.35); margin-bottom: 48px; font-weight: 700; }
+    .mirror-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 4.5vw, 52px); font-weight: 300; font-style: italic; color: var(--cream); line-height: 1.25; margin-bottom: 56px; max-width: 700px; }
+    .mirror-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,.04); max-width: 720px; width: 100%; margin-bottom: 48px; }
+    .mirror-cell { background: #050503; padding: 32px 24px; text-align: center; }
+    .mirror-cell-value { font-family: 'Inter', sans-serif; font-size: 28px; font-weight: 800; color: var(--white); letter-spacing: -.02em; margin-bottom: 8px; line-height: 1; }
+    .mirror-cell-value.gold { color: var(--gold); }
+    .mirror-cell-label { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.25); line-height: 1.5; }
+    .mirror-bylaws { max-width: 560px; margin: 0 auto 48px; }
+    .mirror-bylaw-line { font-family: 'Cormorant Garamond', serif; font-size: 17px; color: rgba(240,235,225,.45); font-style: italic; line-height: 1.65; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+    .mirror-bylaw-line:last-child { border-bottom: none; }
+    .mirror-score-block { margin-top: 12px; }
+    .mirror-score-label { font-size: 9px; letter-spacing: .3em; text-transform: uppercase; color: rgba(255,255,255,.2); margin-bottom: 12px; font-weight: 600; }
+    .mirror-score-num { font-family: 'Inter', sans-serif; font-size: 72px; font-weight: 800; color: var(--gold); letter-spacing: -.04em; line-height: 1; }
+    .mirror-score-sub { font-size: 11px; color: rgba(255,255,255,.2); margin-top: 8px; letter-spacing: .1em; }
+    .mirror-footnote { font-size: 12px; color: rgba(255,255,255,.18); margin-top: 40px; letter-spacing: .02em; }
+
+    /* ── reveal transition glitch ── */
+    .reveal-glitch-overlay { position: fixed; inset: 0; z-index: 9999; background: #050503; pointer-events: none; opacity: 0; transition: opacity 0.05s; }
+    .reveal-glitch-overlay.flash { opacity: 1; }
+    .reveal-glitch-overlay.flash2 { opacity: 1; background: var(--cream); mix-blend-mode: difference; }
+
+    /* ── UTILITIES ── */
+    .divider { width: 40px; height: 2px; background: var(--gold); border-radius: 2px; margin: 32px auto; }
+
+    /* ── CASE STUDY BLOCKS ── */
+    .case-study { background: var(--bg2); border-radius: var(--r-card); padding: 40px; margin: 40px 0 0; border: 1px solid rgba(196,163,90,.15); position: relative; overflow: hidden; }
+    .case-study::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, var(--gold), transparent); }
+    .cs-label { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; font-weight: 600; }
+    .cs-subject { font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 800; color: var(--white); margin-bottom: 20px; text-transform: uppercase; letter-spacing: -.02em; line-height: 1.1; }
+    .cs-subject em { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: 1.1em; text-transform: none; color: var(--gold); letter-spacing: 0; }
+    .cs-intro { font-size: 13px; color: var(--muted); line-height: 1.85; margin-bottom: 28px; }
+    .cs-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 28px; }
+    .cs-stat { background: var(--bg); border-radius: 12px; padding: 18px; }
+    .cs-stat-num { font-family: 'Cormorant Garamond', serif; font-size: 34px; color: var(--gold); font-weight: 400; line-height: 1; margin-bottom: 6px; }
+    .cs-stat-label { font-size: 10px; color: var(--muted); line-height: 1.5; text-transform: uppercase; letter-spacing: .08em; }
+    .cs-detail { font-size: 13px; color: var(--muted); line-height: 1.85; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.06); }
+    .cs-quote { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: 18px; color: var(--gold); line-height: 1.65; margin: 16px 0 8px; }
+    .cs-quote-attr { font-size: 11px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+
+    /* ── ENROLLMENT PRICING BLOCK ── */
+    .enrollment-pricing { background: var(--bg2); border-radius: var(--r-card); border: 1px solid rgba(196,163,90,.25); padding: 36px 40px; margin-bottom: 40px; position: relative; overflow: hidden; }
+    .enrollment-pricing::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, var(--gold), transparent); }
+    .ep-label { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); margin-bottom: 24px; font-weight: 600; }
+    .ep-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 28px; align-items: center; margin-bottom: 24px; }
+    .ep-amount { font-family: 'Cormorant Garamond', serif; font-size: 56px; color: var(--white); font-weight: 400; line-height: 1; margin-bottom: 8px; }
+    .ep-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+    .ep-divider { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; padding: 0 8px; }
+    .ep-alt { background: var(--bg); border-radius: 14px; padding: 20px 22px; border: 1px solid rgba(196,163,90,.1); }
+    .ep-alt-title { font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; font-weight: 600; }
+    .ep-alt-formula { font-size: 15px; color: var(--white); font-weight: 700; line-height: 1.4; margin-bottom: 4px; }
+    .ep-alt-min { font-size: 11px; color: var(--muted); font-weight: 400; display: block; margin-top: 4px; }
+    .ep-alt-note { font-size: 12px; color: var(--gold); font-style: italic; margin-top: 8px; font-family: 'Cormorant Garamond', serif; font-size: 15px; }
+    .ep-fine { font-size: 11px; color: var(--muted); line-height: 1.7; border-top: 1px solid rgba(255,255,255,.05); padding-top: 18px; }
+
+    /* ── MODULE PREVIEW SCREEN ── */
+    .preview-screen { background: var(--bg); min-height: 100vh; }
+    #screen-preview nav { position: fixed; left: 0; right: 0; background: rgba(12,11,9,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,.08); z-index: 100; }
+    .preview-hero { background: var(--bg2); padding: 72px 56px 56px; padding-top: calc(68px + 56px); border-bottom: 1px solid rgba(255,255,255,.05); }
+    .preview-hero-inner { max-width: 900px; margin: 0 auto; }
+    .preview-eyebrow { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; font-weight: 600; }
+    .preview-screen h1 { font-family: 'Inter', sans-serif; font-size: 52px; font-weight: 800; color: var(--white); line-height: 1.0; text-transform: uppercase; letter-spacing: -.025em; margin-bottom: 12px; }
+    .preview-screen h1 em { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: 1.06em; text-transform: none; color: var(--gold); letter-spacing: 0; }
+    .preview-tagline { font-size: 14px; color: var(--muted); font-style: italic; line-height: 1.6; }
+    .preview-body { max-width: 900px; margin: 0 auto; padding: 56px 56px 80px; }
+    .preview-case { background: var(--bg2); border-radius: var(--r-card); border: 1px solid rgba(196,163,90,.2); padding: 44px; margin-bottom: 48px; position: relative; overflow: hidden; }
+    .preview-case::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, var(--gold), transparent); }
+    .preview-case-label { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; font-weight: 600; }
+    .preview-case-subject { font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 800; color: var(--white); text-transform: uppercase; letter-spacing: -.02em; line-height: 1.1; margin-bottom: 24px; }
+    .preview-case-subject em { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: 1.08em; text-transform: none; color: var(--gold); letter-spacing: 0; }
+    .preview-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
+    .preview-stat { background: var(--bg); border-radius: 14px; padding: 20px 22px; }
+    .preview-stat-num { font-family: 'Cormorant Garamond', serif; font-size: 40px; color: var(--gold); font-weight: 400; line-height: 1; margin-bottom: 8px; }
+    .preview-stat-label { font-size: 10px; color: var(--muted); line-height: 1.5; text-transform: uppercase; letter-spacing: .08em; }
+    .preview-case-body { font-size: 13px; color: var(--muted); line-height: 1.85; margin-bottom: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.06); }
+    .preview-case-body p { margin-bottom: 12px; }
+    .preview-case-body p:last-child { margin-bottom: 0; }
+    .preview-quote { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: 20px; color: var(--gold); line-height: 1.6; margin: 20px 0 8px; }
+    .preview-quote-attr { font-size: 11px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+    .preview-divider { border: none; border-top: 1px solid rgba(255,255,255,.06); margin: 40px 0; }
+    .preview-covered-label { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; font-weight: 600; }
+    .preview-covered-grid { display: flex; flex-direction: column; gap: 0; margin-bottom: 44px; }
+    .preview-covered-item { padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,.05); display: flex; gap: 20px; align-items: flex-start; }
+    .preview-covered-item:last-child { border-bottom: none; }
+    .preview-covered-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); margin-top: 7px; flex-shrink: 0; opacity: .7; }
+    .preview-covered-title { font-size: 12px; font-weight: 700; color: var(--white); letter-spacing: .04em; margin-bottom: 5px; text-transform: uppercase; }
+    .preview-covered-text { font-size: 13px; color: var(--muted); line-height: 1.7; }
+    .preview-cta-row { display: flex; gap: 16px; align-items: center; }
+    .preview-cta-note { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+    /* ── LESSON ROW ── */
+    .lesson-row-label { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; font-weight: 600; }
+    .lesson-row { display: flex; gap: 14px; margin-bottom: 48px; overflow-x: auto; padding-bottom: 4px; }
+    .lesson-row::-webkit-scrollbar { height: 3px; }
+    .lesson-row::-webkit-scrollbar-track { background: transparent; }
+    .lesson-row::-webkit-scrollbar-thumb { background: rgba(196,163,90,.2); border-radius: 4px; }
+    .lesson-card { flex: 0 0 160px; display: flex; flex-direction: column; }
+    .lesson-thumb { width: 160px; height: 90px; border-radius: 10px; background: var(--bg2); border: 1px solid rgba(255,255,255,.07); position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 10px; }
+    .lesson-thumb::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(196,163,90,.04) 0%, transparent 60%); }
+    .lesson-lock { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,.55); border: 1px solid rgba(196,163,90,.3); border-radius: 50%; backdrop-filter: blur(4px); }
+    .lesson-lock svg { width: 13px; height: 13px; stroke: var(--gold); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .lesson-num { position: absolute; top: 8px; left: 10px; font-size: 9px; letter-spacing: .14em; color: rgba(196,163,90,.5); font-weight: 700; text-transform: uppercase; }
+    .lesson-title { font-size: 11px; font-weight: 600; color: rgba(240,235,225,.65); line-height: 1.45; letter-spacing: .01em; }
+    .lesson-dur { font-size: 10px; color: var(--muted); margin-top: 3px; }
+
+    /* ── REVEAL SCREEN ── */
+    .reveal-screen { background: #050503; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+    #screen-reveal nav { background: transparent; border-bottom: 1px solid rgba(255,255,255,.05); position: relative; z-index: 10; }
+
+    /* hero */
+    .reveal-hero { position: relative; height: calc(100vh - 68px); display: grid; grid-template-columns: 1fr 420px; overflow: hidden; }
+    .reveal-hero-content { display: flex; flex-direction: column; justify-content: flex-end; padding: 0 80px 80px; position: relative; z-index: 2; }
+    .reveal-exhibit { font-size: 9px; letter-spacing: .38em; text-transform: uppercase; color: rgba(196,163,90,.5); margin-bottom: 28px; font-weight: 700; }
+    .reveal-headline { font-family: 'Cormorant Garamond', serif; font-size: clamp(54px, 8vw, 92px); font-weight: 300; font-style: italic; color: var(--cream); line-height: 1.0; letter-spacing: -.02em; margin-bottom: 28px; }
+    .reveal-sub { font-size: 13px; color: rgba(240,235,225,.35); line-height: 1.9; max-width: 340px; letter-spacing: .01em; }
+    .reveal-wolf-panel { position: relative; overflow: hidden; }
+    .reveal-wolf-panel img { position: absolute; bottom: 0; right: 0; height: 92%; width: auto; opacity: .65; mix-blend-mode: luminosity; filter: contrast(1.05); }
+    .reveal-wolf-panel::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to right, #050503 0%, rgba(5,5,3,.25) 40%, transparent 100%); z-index: 1; }
+    .reveal-wolf-panel::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 38%; background: linear-gradient(to top, #050503, transparent); z-index: 1; }
+    .reveal-scroll-cue { position: absolute; bottom: 36px; left: 80px; z-index: 3; display: flex; align-items: center; gap: 12px; font-size: 9px; letter-spacing: .24em; text-transform: uppercase; color: rgba(196,163,90,.28); }
+    .reveal-scroll-cue::before { content: ''; display: block; width: 28px; height: 1px; background: rgba(196,163,90,.2); }
+
+    /* passages */
+    .reveal-passages { background: #050503; }
+    .reveal-passage { padding: 68px 80px; border-top: 1px solid rgba(255,255,255,.045); display: grid; grid-template-columns: 96px 1fr; gap: 0 44px; align-items: start; }
+    .reveal-passage:last-of-type { border-bottom: 1px solid rgba(255,255,255,.045); }
+    .rp-num { font-family: 'Cormorant Garamond', serif; font-size: 68px; font-weight: 300; color: rgba(196,163,90,.11); line-height: 1; margin-top: -8px; user-select: none; }
+    .rp-ref { font-size: 9px; letter-spacing: .32em; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 20px; opacity: .75; }
+    .rp-verse { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: clamp(22px, 2.3vw, 30px); color: rgba(240,235,225,.82); line-height: 1.68; }
+    .rp-verse.greek { font-style: normal; font-size: clamp(19px, 2vw, 25px); letter-spacing: .01em; }
+
+    /* translation zone */
+    .reveal-trans-section { padding: 52px 80px 60px; padding-left: calc(80px + 96px + 44px); border-top: none; }
+    .trans-toggle { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+    .trans-btn { font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; padding: 7px 16px; border-radius: var(--r-pill); border: 1px solid rgba(255,255,255,.09); background: transparent; color: var(--muted); cursor: pointer; transition: all .2s; }
+    .trans-btn:hover { border-color: rgba(255,255,255,.22); color: var(--on-dark); }
+    .trans-btn.active { background: rgba(196,163,90,.08); border-color: rgba(196,163,90,.35); color: var(--gold); }
+    .trans-blurb { font-size: 11px; color: rgba(122,116,104,.65); line-height: 1.75; max-width: 500px; }
+
+    /* statement zone */
+    .reveal-statement { padding: 96px 80px 52px; max-width: 820px; }
+    .reveal-stmt-rule { width: 36px; height: 1.5px; background: var(--gold); opacity: .3; margin-bottom: 48px; }
+    .reveal-stmt-big { font-family: 'Cormorant Garamond', serif; font-size: clamp(26px, 3vw, 38px); font-weight: 300; font-style: italic; color: rgba(240,235,225,.55); line-height: 1.55; margin-bottom: 24px; }
+    .reveal-stmt-big strong { font-style: normal; font-weight: 400; color: var(--cream); }
+    .reveal-stmt-small { font-size: 13px; color: rgba(122,116,104,.75); line-height: 1.9; }
+    .reveal-stmt-small strong { color: rgba(240,235,225,.7); font-weight: 500; }
+
+    /* cta zone */
+    .reveal-cta { padding: 48px 80px 100px; display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+    .reveal-cta-note { font-size: 11px; color: rgba(122,116,104,.55); line-height: 1.6; }
+
+    /* ── PAYMENT SCREEN ── */
+    .payment-screen { background: var(--bg); min-height: 100vh; }
+    #screen-payment nav { position: sticky; top: 0; background: rgba(12,11,9,0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,.06); z-index: 100; }
+    .payment-container { max-width: 680px; margin: 0 auto; padding: 72px 48px 80px; }
+    .payment-breadcrumb { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; font-weight: 500; }
+    .payment-header { margin-bottom: 40px; }
+    .payment-header h2 { font-family: 'Inter', sans-serif; font-size: 44px; font-weight: 800; color: var(--white); margin-bottom: 12px; line-height: 1.0; text-transform: uppercase; letter-spacing: -.025em; }
+    .payment-header h2 em { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: 1.05em; text-transform: none; color: var(--gold); }
+    .payment-header p { font-size: 13px; color: var(--muted); line-height: 1.8; }
+    .payment-form-card { background: var(--bg2); border-radius: var(--r-card); border: 1px solid rgba(255,255,255,.06); padding: 36px 40px; margin-top: 32px; }
+    .payment-form-title { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; font-weight: 600; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .form-field-pay { display: flex; flex-direction: column; gap: 7px; }
+    .form-field-pay label { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+    .form-field-pay input { background: var(--bg3); border: 1.5px solid rgba(255,255,255,.08); border-radius: 10px; padding: 13px 16px; font-size: 13px; color: var(--on-dark); font-family: 'Inter', sans-serif; outline: none; transition: border-color .2s; }
+    .form-field-pay input::placeholder { color: rgba(122,116,104,.5); }
+    .form-field-pay input:focus { border-color: rgba(196,163,90,.45); }
+    .payment-divider { border: none; border-top: 1px solid rgba(255,255,255,.05); margin: 28px 0 24px; }
+    .payment-section-label { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; font-weight: 600; }
+    .card-field-full { margin-bottom: 16px; }
+    .btn-enroll { background: var(--gold); color: var(--bg); font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; padding: 18px 40px; border: none; cursor: pointer; border-radius: var(--r-pill); transition: background .2s, transform .15s; width: 100%; margin-top: 12px; letter-spacing: .02em; }
+    .btn-enroll:hover { background: var(--gold2); transform: translateY(-1px); }
+    .payment-fine { font-size: 11px; color: var(--muted); line-height: 1.75; margin-top: 20px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.05); }
+    .payment-alt-link { font-size: 12px; color: var(--muted); margin-top: 20px; text-align: center; }
+    .payment-alt-link a { color: var(--gold); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .2s; }
+    .payment-alt-link a:hover { border-bottom-color: var(--gold); }
+
+    @media (max-width: 768px) {
+      .hero { grid-template-columns: 1fr; grid-template-rows: auto auto auto; padding-top: 80px; }
+      .hero-video-panel { grid-column: 1; grid-row: 1; height: 50vw; }
+      .hero-inner { grid-column: 1; grid-row: 2; padding: 32px 24px 24px; }
+      .hero-stats-row { grid-column: 1; grid-row: 3; padding: 0 24px 48px; }
+      .hero h1 { font-size: 52px; }
+      .stats { grid-template-columns: repeat(2,1fr); }
+      .intro, .modules-section, .testimonials, .cta-section { padding-left: 24px; padding-right: 24px; }
+      .intro-inner { grid-template-columns: 1fr; gap: 40px; }
+      .module-grid { grid-template-columns: 1fr; }
+      .testi-grid { grid-template-columns: 1fr; }
+      .profile-grid { grid-template-columns: 1fr; }
+      nav { padding: 0 24px; }
+      .nav-links a { display: none; }
+      .survey-container, .module-body, .module-hero { padding: 48px 24px; }
+      .results-screen, .traits-screen { padding: 48px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     SCREEN 1 · LANDING
+═══════════════════════════════════════════════════ -->
+<div id="screen-landing" class="screen active">
+  <div class="bar">
+    <span>Ministry Financial Strategy</span>
+    <span class="dot">·</span>
+    <span>2026 Edition</span>
+    <span class="dot">·</span>
+    <span>Limited Enrollment Open</span>
+  </div>
+
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-logo" onclick="navigate('landing')">The <em>Prosperity</em> Playbook</div>
+      <div class="nav-links">
+        <a href="#" onclick="event.preventDefault(); showModuleModal(1)">Legal Foundation</a>
+        <a href="#" onclick="event.preventDefault(); showModuleModal(2)">Compensation</a>
+        <a href="#" onclick="event.preventDefault(); showModuleModal(3)">Donor Culture</a>
+        <a href="#" onclick="event.preventDefault(); showModuleModal(4)">Platform</a>
+        <a href="#" onclick="event.preventDefault(); showModuleModal(5)">Governance</a>
+        <button class="btn-nav" onclick="navigate('payment')">Join 2026 Cohort</button>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero" id="hero-landing">
+    <!-- Glitch flash overlay (filled by JS) -->
+    <div class="glitch-flash" id="glitch-flash"></div>
+
+    <!-- Left: text content -->
+    <div class="hero-inner">
+      <div class="hero-label">For Senior Pastors &amp; Executive Ministry Leaders</div>
+      <h1>The <em>Prosperity</em><br>Playbook</h1>
+      <div class="hero-ctas">
+        <button class="btn-primary" onclick="navigate('payment')">Join 2026 Cohort</button>
+        <button class="btn-ghost" onclick="navigate('survey')">Build Your Ministry Profile</button>
+      </div>
+    </div>
+
+    <!-- Right: video panel -->
+    <div class="hero-video-panel">
+      <video autoplay muted loop playsinline>
+        <source src="0326.mov" type="video/mp4">
+      </video>
+    </div>
+
+    <!-- Stats: full-width bottom row -->
+    <div class="hero-stats-row">
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-val">$1T</div>
+          <div class="stat-label">Annual giving to domestic<br>ministry globally</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val">0</div>
+          <div class="stat-label">Mandatory public financial<br>disclosures required</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val">§ 7611</div>
+          <div class="stat-label">Federal audit protection<br>available to churches</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val">5</div>
+          <div class="stat-label">Modules to full financial<br>optimization</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="intro">
+    <div class="intro-inner">
+      <div>
+        <div class="section-label">Introduction</div>
+        <h2>Your Ministry Has<br><em>Advantages.</em><br>Use Them.</h2>
+        <p>The American church operates within a regulatory framework that provides structural advantages no other type of organization enjoys. Most ministry leaders are unaware of the full scope of these advantages — or how to position their organizations to benefit from them.</p>
+        <p><strong>The Prosperity Playbook</strong> documents the financial strategies already used by the most successful ministry organizations in the country. Every practice described here is legal, documented, and currently in use by churches managing eight- and nine-figure annual budgets.</p>
+        <p>This is not theory. This is not aspiration. These are the operational best practices of a $1 trillion sector — distilled into five modules you can apply immediately.</p>
+        <ul class="intro-bullets">
+          <li><span class="bullet-mark">✦</span><div><strong>Legally grounded</strong> — every strategy maps to specific IRS code provisions, Treasury regulations, and established legal precedent.</div></li>
+          <li><span class="bullet-mark">✦</span><div><strong>Field-tested</strong> — used by organizations ranging from community churches to multi-site ministries managing nine-figure budgets.</div></li>
+          <li><span class="bullet-mark">✦</span><div><strong>Implementation-ready</strong> — action items, communication frameworks, and structural templates included in each module.</div></li>
+        </ul>
+      </div>
+      <div>
+        <div class="landscape-card">
+          <div class="landscape-title">The Ministry Financial Landscape</div>
+          <div class="lc-row">
+            <div class="lc-val">$1T</div>
+            <div class="lc-desc">Estimated annual income to global Christian causes. A growing market with significant untapped potential at the leadership level.</div>
+          </div>
+          <div class="lc-row">
+            <div class="lc-val">0</div>
+            <div class="lc-desc">Mandatory federal financial disclosures required of churches. Your organization's financial details are not public record.</div>
+          </div>
+          <div class="lc-row">
+            <div class="lc-val">§ 7611</div>
+            <div class="lc-desc">The Church Audit Procedures Act requires senior Treasury approval before any IRS examination of a church can begin.</div>
+          </div>
+          <div class="lc-row">
+            <div class="lc-val">§ 107</div>
+            <div class="lc-desc">The ministers housing allowance — widely regarded as the most valuable tax benefit available to any professional in the United States.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="modules-section" id="section-modules">
+    <div class="modules-inner">
+      <div class="section-label">Curriculum</div>
+      <h2>Five Modules to<br><em>Financial Optimization</em></h2>
+      <div class="module-grid">
+        <div class="module-card" onclick="showModuleModal(1)">
+          <div class="mc-image"><div class="mc-image-inner" style="background-image: url('dallinhoaks.png'); background-size: cover; background-position: center top;"></div></div>
+          <div class="mc-tag">Module 1 · 4 lessons · 38 min</div>
+          <div class="mc-title">Legal Foundation</div>
+          <div class="mc-desc">The structural protections available to your organization — and the provisions to ensure you're using all of them.</div>
+          <div class="mc-footer"><span>Preview Module</span><span class="mc-arrow">→</span></div>
+        </div>
+        <div class="module-card" onclick="showModuleModal(2)">
+          <div class="mc-image"><div class="mc-image-inner" style="background-image: url('pastoralcompensation.webp'); background-size: cover; background-position: center top;"></div></div>
+          <div class="mc-tag">Module 2 · 5 lessons · 51 min</div>
+          <div class="mc-title">Pastoral Compensation</div>
+          <div class="mc-desc">Optimize your compensation package through structures that are both legal and entirely private.</div>
+          <div class="mc-footer"><span>Preview Module</span><span class="mc-arrow">→</span></div>
+        </div>
+        <div class="module-card" onclick="showModuleModal(3)">
+          <div class="mc-image"><div class="mc-image-inner" style="background-image: url('donorculture.jpg'); background-size: cover; background-position: center top;"></div></div>
+          <div class="mc-tag">Module 3 · 4 lessons · 44 min</div>
+          <div class="mc-title">Donor Culture</div>
+          <div class="mc-desc">Build an environment where financial questions are answered at the pulpit — and giving becomes a formality.</div>
+          <div class="mc-footer"><span>Preview Module</span><span class="mc-arrow">→</span></div>
+        </div>
+        <div class="module-card" onclick="showModuleModal(4)">
+          <div class="mc-image"><div class="mc-image-inner" style="background-image: url('platformandproduction.avif'); background-size: cover; background-position: center top;"></div></div>
+          <div class="mc-tag">Module 4 · 4 lessons · 39 min</div>
+          <div class="mc-title">Platform &amp; Production</div>
+          <div class="mc-desc">The business case for treating production investment as your highest ROI line item — and as a tax instrument.</div>
+          <div class="mc-footer"><span>Preview Module</span><span class="mc-arrow">→</span></div>
+        </div>
+        <div class="module-card" onclick="showModuleModal(5)">
+          <div class="mc-image"><div class="mc-image-inner" style="background-image: url('boardgovernance.jpg'); background-size: cover; background-position: center top;"></div></div>
+          <div class="mc-tag">Module 5 · 5 lessons · 58 min</div>
+          <div class="mc-title">Board Governance</div>
+          <div class="mc-desc">Structure your board for leadership amplification — not restriction.</div>
+          <div class="mc-footer"><span>Preview Module</span><span class="mc-arrow">→</span></div>
+        </div>
+        <div class="module-card" onclick="navigate('survey')" style="background:var(--bg3); display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:48px 28px;">
+          <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;">The Suite</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--on-dark);margin-bottom:16px;">Working Together</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:24px;">Legal structure is your total compensation strategy. These natural protects support in every board governance decision. Each module is designed to reinforce the others.</div>
+          <button class="btn-primary" onclick="navigate('survey')" style="font-size:10px;padding:12px 24px;">Build Your Profile</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <div class="testimonials-inner">
+      <div class="section-label">From Playbook Leaders</div>
+      <h2>What <em>Pastors</em><br>Are Saying</h2>
+      <div class="testi-grid">
+        <div class="testi-card">
+          <div class="testi-num">01</div>
+          <div class="testi-quote">"When a board member raised questions about how benevolence funds were allocated, I had language I didn't have before. The issue simply moved on. That's what good communication strategy looks like."</div>
+          <div class="testi-name">Pastor J. Merritt</div>
+          <div class="testi-cohort">Senior Pastor, Module III alumni</div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-num">02</div>
+          <div class="testi-quote">"We restructured as an association of churches following Module I. It removed our 990 filing obligation entirely. Our donors never asked about it, because we'd already established the right culture around giving."</div>
+          <div class="testi-name">Rev. T. Richardson</div>
+          <div class="testi-cohort">Executive Director, 2024 cohort</div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-num">03</div>
+          <div class="testi-quote">"The housing allowance section alone changed my family's financial picture. My compensation is structured appropriately and privately. I can lead without that distraction."</div>
+          <div class="testi-name">Pastor P. Williams</div>
+          <div class="testi-cohort">Founding Pastor, Module II alumni</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Ready to Optimize<br>Your Ministry's<br><em>Financial Position</em></h2>
+    <p>The 2026 cohort is now accepting applications from senior pastors and executive ministry leaders at all ministry sizes.</p>
+
+    <div class="enrollment-pricing" style="max-width:700px;margin:0 auto 36px;text-align:left;">
+      <div class="ep-label">2026 Cohort · Program Investment</div>
+      <div class="ep-row">
+        <div class="ep-main">
+          <div class="ep-amount">$24,997</div>
+          <div class="ep-desc">One-time enrollment. Full curriculum access. Private cohort placement.</div>
+        </div>
+        <div class="ep-divider">or</div>
+        <div class="ep-alt">
+          <div class="ep-alt-title">Ministry Growth Plan</div>
+          <div class="ep-alt-formula">4 quarterly installments<span class="ep-alt-min">of $6,997 each · $27,988 total</span></div>
+          <div class="ep-alt-note">Structured as a ministry operating expense.</div>
+        </div>
+      </div>
+      <div class="ep-fine">Enrollment contribution is classified as a ministry operating expense and is fully deductible under your organization's existing tax-exempt status. No Form 990 disclosure required.</div>
+    </div>
+
+    <button class="btn-primary" onclick="navigate('payment')">Join the 2026 Cohort</button>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">The <em>Prosperity</em> Playbook</div>
+        <div class="footer-text">Strategic financial guidance for ministry leaders. Every practice documented here is legal, established, and currently in use by the most successful churches and parachurch organizations in the United States.</div>
+      </div>
+      <div class="footer-col">
+        <h4>Modules</h4>
+        <a href="#">I. Legal Foundation</a>
+        <a href="#">II. Pastoral Compensation</a>
+        <a href="#">III. Donor Culture</a>
+        <a href="#">IV. Platform &amp; Production</a>
+        <a href="#">V. Board Governance</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal References</h4>
+        <a href="#">IRC §107(1)(2)</a>
+        <a href="#">IRS § 501(c)(3)</a>
+        <a href="#">ECFA 2015</a>
+        <a href="#">IRC §1402(c)(4)</a>
+        <a href="#">IRS Tax Exemptions (2015)</a>
+        <a href="#">Calvin v. Ramirez (2019)</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 The Prosperity Playbook. Strategic financial guidance for ministry leaders.</div>
+  </footer>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SCREEN 2 · CONFIGURATOR
+═══════════════════════════════════════════════════ -->
+<div id="screen-survey" class="screen config-screen">
+  <div class="bar">
+    <span>Ministry Financial Strategy</span>
+    <span class="dot">·</span>
+    <span>2026 Edition</span>
+    <span class="dot">·</span>
+    <span>Ministry Structure Assessment</span>
+  </div>
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-logo" onclick="navigate('landing')">The <em>Prosperity</em> Playbook</div>
+      <div class="nav-links">
+        <button class="btn-ghost" onclick="navigate('landing')" style="padding:8px 18px;font-size:10px;">← Return to Overview</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="config-layout">
+    <div class="config-main">
+      <!-- Progress -->
+      <div class="config-progress">
+        <div class="config-progress-step active" id="cprog-0"></div>
+        <div class="config-progress-step" id="cprog-1"></div>
+        <div class="config-progress-step" id="cprog-2"></div>
+        <div class="config-progress-step" id="cprog-3"></div>
+      </div>
+
+      <!-- ── STEP 1: Organizational Structure ── -->
+      <div class="config-step active" id="cstep-0">
+        <div class="config-step-label">Step 1 of 4 · Organizational Structure</div>
+        <h2>How Is Your Ministry<br><em>Structured?</em></h2>
+        <p class="config-desc">Your organizational classification determines which federal protections and exemptions apply. Choose the structure that best positions your ministry for long-term financial optimization.</p>
+
+        <div class="org-cards">
+          <div class="org-card" onclick="selectOrg(0)">
+            <div class="org-card-header">
+              <div class="org-card-title">501(c)(3) Nonprofit</div>
+              <div class="org-card-badge standard">Standard</div>
+            </div>
+            <div class="org-card-desc">Standard nonprofit classification. Subject to public financial disclosure via Form 990. Leadership compensation is public record. Widely used by smaller ministries that have not yet optimized their structure.</div>
+            <div class="org-card-features">
+              <span class="org-feature on">Tax-Exempt</span>
+              <span class="org-feature off">990 Exempt</span>
+              <span class="org-feature off">CAPA Protected</span>
+              <span class="org-feature off">Compensation Private</span>
+            </div>
+          </div>
+
+          <div class="org-card" onclick="selectOrg(1)">
+            <div class="org-card-header">
+              <div class="org-card-title">Church</div>
+              <div class="org-card-badge recommended">Recommended</div>
+            </div>
+            <div class="org-card-desc">IRS church classification under the 14-factor test. Exempt from Form 990 filing. Protected by the Church Audit Procedures Act. Leadership compensation is not publicly disclosed. No single factor is determinative for qualification.</div>
+            <div class="org-card-features">
+              <span class="org-feature on">Tax-Exempt</span>
+              <span class="org-feature on">990 Exempt</span>
+              <span class="org-feature on">CAPA Protected</span>
+              <span class="org-feature on">Compensation Private</span>
+            </div>
+          </div>
+
+          <div class="org-card" onclick="selectOrg(2)">
+            <div class="org-card-header">
+              <div class="org-card-title">Association of Churches</div>
+              <div class="org-card-badge advanced">Maximum Protection</div>
+            </div>
+            <div class="org-card-desc">Multi-entity umbrella structure. All church-level protections apply, plus the ability to shelter subsidiary organizations — including for-profit entities — under the religious exemption umbrella. Used by the largest ministry operations in the country.</div>
+            <div class="org-card-features">
+              <span class="org-feature on">Tax-Exempt</span>
+              <span class="org-feature on">990 Exempt</span>
+              <span class="org-feature on">CAPA Protected</span>
+              <span class="org-feature on">Subsidiary Shelter</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="config-nav">
+          <div></div>
+          <button class="btn-config-next disabled" id="cfg-next-0" onclick="configNext()">Continue →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 2: Compensation Architecture ── -->
+      <div class="config-step" id="cstep-1">
+        <div class="config-step-label">Step 2 of 4 · Compensation Architecture</div>
+        <h2>Structure Your<br><em>Compensation Package</em></h2>
+        <p class="config-desc">Configure your total compensation. Toggle each instrument on or off and set amounts. Watch how the structure affects what is publicly visible versus what remains private.</p>
+
+        <div class="comp-section">
+          <div class="comp-section-title">Base Compensation</div>
+          <div class="comp-slider-row">
+            <div class="comp-slider-header">
+              <div class="comp-slider-name">Annual Base Salary</div>
+              <div class="comp-slider-value" id="comp-salary-display">$250,000</div>
+            </div>
+            <input type="range" class="comp-slider" id="comp-salary" min="80000" max="600000" step="10000" value="250000" oninput="updateComp()">
+          </div>
+        </div>
+
+        <div class="comp-section">
+          <div class="comp-section-title">Tax-Advantaged Instruments</div>
+          <div class="comp-toggle-row">
+            <div class="comp-toggle-info">
+              <div class="comp-toggle-name">Housing Allowance (§107)</div>
+              <div class="comp-toggle-desc">Exclude mortgage, rent, utilities, furnishings from gross income. No statutory cap. Board-designated.</div>
+            </div>
+            <label class="toggle-switch"><input type="checkbox" id="comp-housing" onchange="updateComp()" checked><span class="toggle-track"></span></label>
+          </div>
+          <div class="comp-toggle-row">
+            <div class="comp-toggle-info">
+              <div class="comp-toggle-name">Vehicle Allowance</div>
+              <div class="comp-toggle-desc">Ministry vehicle or mileage reimbursement structured as non-taxable ministry expense.</div>
+            </div>
+            <label class="toggle-switch"><input type="checkbox" id="comp-vehicle" onchange="updateComp()"><span class="toggle-track"></span></label>
+          </div>
+          <div class="comp-toggle-row">
+            <div class="comp-toggle-info">
+              <div class="comp-toggle-name">Deferred Compensation</div>
+              <div class="comp-toggle-desc">457(b) plan contributions. Not reported as current income. Not visible in standard financial summaries.</div>
+            </div>
+            <label class="toggle-switch"><input type="checkbox" id="comp-deferred" onchange="updateComp()"><span class="toggle-track"></span></label>
+          </div>
+          <div class="comp-toggle-row">
+            <div class="comp-toggle-info">
+              <div class="comp-toggle-name">Professional Expense Account</div>
+              <div class="comp-toggle-desc">Books, conferences, travel, meals, clothing — structured as ministry operating costs, not personal compensation.</div>
+            </div>
+            <label class="toggle-switch"><input type="checkbox" id="comp-expense" onchange="updateComp()"><span class="toggle-track"></span></label>
+          </div>
+          <div class="comp-toggle-row">
+            <div class="comp-toggle-info">
+              <div class="comp-toggle-name">FICA Opt-Out (§1402(c)(4))</div>
+              <div class="comp-toggle-desc">Ministers may exempt themselves from Social Security tax on religious grounds. Irrevocable once filed.</div>
+            </div>
+            <label class="toggle-switch"><input type="checkbox" id="comp-fica" onchange="updateComp()"><span class="toggle-track"></span></label>
+          </div>
+        </div>
+
+        <div class="comp-summary">
+          <div class="comp-summary-row">
+            <div class="comp-summary-label">What You Earn</div>
+            <div class="comp-summary-value total" id="comp-total">$250,000</div>
+          </div>
+          <hr class="comp-summary-divider">
+          <div class="comp-summary-row">
+            <div class="comp-summary-label">What Anyone Can See</div>
+            <div class="comp-summary-value visible" id="comp-visible">$250,000</div>
+          </div>
+          <div class="comp-summary-note" id="comp-note">Your compensation is currently fully visible on Form 990.</div>
+        </div>
+
+        <div class="config-nav">
+          <button class="btn-config-back" onclick="configBack()">← Back</button>
+          <button class="btn-config-next" id="cfg-next-1" onclick="configNext()">Continue →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 3: Board Governance ── -->
+      <div class="config-step" id="cstep-2">
+        <div class="config-step-label">Step 3 of 4 · Board Governance</div>
+        <h2>Structure Your<br><em>Board.</em></h2>
+        <p class="config-desc">Configure who governs your ministry, what they have access to, and how decisions are made. Each choice generates the bylaw language your organization would adopt.</p>
+
+        <div class="gov-group">
+          <div class="gov-group-title">Who Appoints Board Members?</div>
+          <div class="gov-options" id="gov-appoint">
+            <div class="gov-option" onclick="selectGov('appoint',0)">
+              <div class="gov-radio"><div class="gov-radio-dot"></div></div>
+              <div class="gov-option-text">Congregational vote<small>Members elect board members directly. Traditional democratic governance.</small></div>
+            </div>
+            <div class="gov-option" onclick="selectGov('appoint',1)">
+              <div class="gov-radio"><div class="gov-radio-dot"></div></div>
+              <div class="gov-option-text">Board self-selects, pastor confirms<small>Existing board nominates new members. Senior pastor has veto authority.</small></div>
+            </div>
+            <div class="gov-option" onclick="selectGov('appoint',2)">
+              <div class="gov-radio"><div class="gov-radio-dot"></div></div>
+              <div class="gov-option-text">Senior pastor appoints directly<small>Leadership selects all board members. No congregational input required.</small></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="gov-group">
+          <div class="gov-group-title">What Does the Board Review?</div>
+          <div class="gov-options" id="gov-access">
+            <div class="gov-option" onclick="selectGov('access',0)">
+              <div class="gov-radio"><div class="gov-radio-dot"></div></div>
+              <div class="gov-option-text">Full financial records<small>Complete access to all accounts, transactions, and compensation details.</small></div>
+            </div>
+            <div class="gov-option" onclick="selectGov('access',1)">
+              <div class="gov-radio"><div class="gov-radio-dot"></div></div>
+              <div class="gov-option-text">Summary reports only<small>Board reviews high-level financial summaries prepared by leadership.</small></div>
+            </div>
+            <div class="gov-option" onclick="selectGov('access',2)">
+              <div class="gov-radio"><div class="gov-radio-dot"></div></div>
+              <div class="gov-option-text">Available upon written request<small>Records accessible only through formal request process approved by senior pastor.</small></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="gov-group">
+          <div class="gov-group-title">Member Voting Rights</div>
+          <div class="gov-options" id="gov-voting">
+            <div class="gov-option" onclick="selectGov('voting',0)">
+              <div class="gov-radio"><div class="gov-radio-dot"></div></div>
+              <div class="gov-option-text">Members vote on major decisions<small>Budget approval, pastoral hiring, property purchases require congregational vote.</small></div>
+            </div>
+            <div class="gov-option" onclick="selectGov('voting',1)">
+              <div class="gov-radio"><div class="gov-radio-dot"></div></div>
+              <div class="gov-option-text">Members vote on pastoral succession only<small>All other governance decisions delegated to the board or leadership team.</small></div>
+            </div>
+            <div class="gov-option" onclick="selectGov('voting',2)">
+              <div class="gov-radio"><div class="gov-radio-dot"></div></div>
+              <div class="gov-option-text">No member voting rights<small>"Members are not entitled to vote in person, by proxy or otherwise."</small></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="gov-bylaw-preview">
+          <div class="gov-bylaw-label">Your Bylaws · Live Preview</div>
+          <div class="gov-bylaw-text">
+            <span class="bylaw-line" id="bylaw-appoint">Board appointment method: not yet configured.</span>
+            <span class="bylaw-line" id="bylaw-access">Financial access policy: not yet configured.</span>
+            <span class="bylaw-line" id="bylaw-voting">Member voting provision: not yet configured.</span>
+          </div>
+        </div>
+
+        <div class="config-nav">
+          <button class="btn-config-back" onclick="configBack()">← Back</button>
+          <button class="btn-config-next disabled" id="cfg-next-2" onclick="configNext()">Continue →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 4: Donor Communication Framework ── -->
+      <div class="config-step" id="cstep-3">
+        <div class="config-step-label">Step 4 of 4 · Donor Communication</div>
+        <h2>When a Congregant Asks<br>Where Their <em>Tithe</em> Goes —</h2>
+        <p class="config-desc">Choose the communication framework your ministry will use when donors ask financial questions. Each option includes sample language tested at high-performing ministries.</p>
+
+        <div class="donor-cards">
+          <div class="donor-card" onclick="selectDonor(0)">
+            <div class="donor-card-title">Open Books</div>
+            <div class="donor-card-sample">"We publish our full annual financial report to every member. Here's this year's — it includes line-item breakdowns of every category, including leadership compensation."</div>
+            <div class="donor-card-note">Full transparency. Used by approximately 10% of churches with annual budgets over $5M.</div>
+          </div>
+
+          <div class="donor-card" onclick="selectDonor(1)">
+            <div class="donor-card-title">Mission-Focused Redirect</div>
+            <div class="donor-card-sample">"We'd love to share. Last year your generosity funded 14 community programs, supported 3 church plants, and brought 200 families through our doors for the first time. That's where your tithe goes — into changed lives."</div>
+            <div class="donor-card-note">Redirects from line items to impact narrative. Answers the emotional question without answering the financial one.</div>
+          </div>
+
+          <div class="donor-card" onclick="selectDonor(2)">
+            <div class="donor-card-title">Theological Reframe</div>
+            <div class="donor-card-sample">"Tithing is an act of obedience and worship — it's between you and God. We steward what's given faithfully, and we trust that the same faith that moves you to give is the faith that trusts leadership to allocate it wisely."</div>
+            <div class="donor-card-note">Reframes the question as a spiritual matter, not a financial one. Positions inquiry itself as a faith issue.</div>
+          </div>
+
+          <div class="donor-card" onclick="selectDonor(3)">
+            <div class="donor-card-title">Access Boundary</div>
+            <div class="donor-card-sample">"Our financial stewardship is overseen by our board of directors, who review all allocations regularly. Detailed financial information is available through the appropriate governance channels, not through individual member requests."</div>
+            <div class="donor-card-note">Establishes that financial details are a governance matter, not a membership entitlement. Used language from Module V alumni communications.</div>
+          </div>
+        </div>
+
+        <div class="config-nav">
+          <button class="btn-config-back" onclick="configBack()">← Back</button>
+          <button class="btn-config-next disabled" id="cfg-next-3" onclick="submitConfig()">Build Your Ministry Profile →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SIDEBAR: Running Profile ── -->
+    <div class="config-sidebar">
+      <div class="profile-card">
+        <div class="profile-card-title">Your Ministry Profile</div>
+        <div class="profile-card-row">
+          <div class="profile-card-label">Organization</div>
+          <div class="profile-card-value empty" id="sidebar-org">Not configured</div>
+        </div>
+        <div class="profile-card-row">
+          <div class="profile-card-label">Total Compensation</div>
+          <div class="profile-card-value empty" id="sidebar-comp">—</div>
+        </div>
+        <div class="profile-card-row">
+          <div class="profile-card-label">Publicly Disclosed</div>
+          <div class="profile-card-value empty" id="sidebar-visible">—</div>
+        </div>
+        <div class="profile-card-row">
+          <div class="profile-card-label">Governance</div>
+          <div class="profile-card-value empty" id="sidebar-gov">Not configured</div>
+        </div>
+        <div class="profile-card-row">
+          <div class="profile-card-label">Donor Framework</div>
+          <div class="profile-card-value empty" id="sidebar-donor">Not configured</div>
+        </div>
+        <div class="profile-card-metric">
+          <div class="profile-card-metric-label">Leadership Protection Score</div>
+          <div class="profile-card-metric-value" id="sidebar-score">0</div>
+          <div class="profile-card-metric-sub">of 100</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SCREEN 3 · RESULTS + DASHBOARD
+═══════════════════════════════════════════════════ -->
+<div id="screen-results" class="screen results-screen">
+  <div class="bar">
+    <span>Ministry Financial Strategy</span>
+    <span class="dot">·</span>
+    <span>2026 Edition</span>
+    <span class="dot">·</span>
+    <span>Assessment Complete</span>
+  </div>
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-logo" onclick="navigate('landing')">The <em>Prosperity</em> Playbook</div>
+      <div class="nav-links">
+        <button class="btn-ghost" onclick="navigate('landing')" style="padding:8px 18px;font-size:10px;">← Overview</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="results-inner" style="padding-top:64px;">
+    <div class="results-badge">Assessment Complete · 2026 Cohort</div>
+    <h2>You're a Strong Fit<br>for the <em>Program.</em></h2>
+    <p>Based on your responses, you demonstrate the financial leadership posture of a ministry ready to optimize. Your profile reflects a commitment to sustained, undistracted leadership — which is exactly what this program is designed to support. You've been added to the 2026 waitlist.</p>
+
+    <div class="profile-section">
+      <h3>Your Ministry Leadership Profile</h3>
+      <div class="profile-grid">
+        <div class="profile-stat">
+          <div class="ps-label">Financial Stewardship<small>Alignment with resource optimization principles</small></div>
+          <div><span class="ps-score" id="ps-steward">—</span><span class="ps-check">✓</span></div>
+        </div>
+        <div class="profile-stat">
+          <div class="ps-label">Organizational Clarity<small>Structural efficiency and disclosure posture</small></div>
+          <div><span class="ps-score" id="ps-clarity">—</span><span class="ps-check">✓</span></div>
+        </div>
+        <div class="profile-stat">
+          <div class="ps-label">Leadership Protection<small>Capacity to operate without external interference</small></div>
+          <div><span class="ps-score" id="ps-protect">—</span><span class="ps-check">✓</span></div>
+        </div>
+        <div class="profile-stat">
+          <div class="ps-label">Congregational Communication<small>Frameworks for managing donor relationships at scale</small></div>
+          <div><span class="ps-score" id="ps-comms">—</span><span class="ps-check">✓</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="enrollment-pricing">
+      <div class="ep-label">2026 Cohort · Program Investment</div>
+      <div class="ep-row">
+        <div class="ep-main">
+          <div class="ep-amount">$24,997</div>
+          <div class="ep-desc">One-time enrollment. Full curriculum access. Private cohort placement.</div>
+        </div>
+        <div class="ep-divider">or</div>
+        <div class="ep-alt">
+          <div class="ep-alt-title">Ministry Growth Plan</div>
+          <div class="ep-alt-formula">4 quarterly installments<span class="ep-alt-min">of $6,997 each · $27,988 total</span></div>
+          <div class="ep-alt-note">Structured as a ministry operating expense.</div>
+        </div>
+      </div>
+      <div class="ep-fine">Enrollment contribution is classified as a ministry operating expense and is fully deductible under your organization's existing tax-exempt status. No Form 990 disclosure required. All ministry sizes welcome — no minimum revenue requirement.</div>
+    </div>
+
+    <div class="dashboard-header">
+      <h3>Your Curriculum · 2026 Cohort</h3>
+      <p>Begin with Module I. Each module unlocks upon completion of the previous.</p>
+    </div>
+    <div class="module-list" id="module-list">
+      <div class="module-row" id="mrow-1" onclick="navigate('module-1')">
+        <div class="mr-num">I</div>
+        <div class="mr-body">
+          <div class="mr-title">Legal Foundation</div>
+          <div class="mr-subtitle">4 lessons · 38 min · The structural protections available to your organization</div>
+        </div>
+        <div class="mr-status open">Begin →</div>
+      </div>
+      <div class="module-row locked" id="mrow-2" onclick="navigate('module-2')">
+        <div class="mr-num">II</div>
+        <div class="mr-body">
+          <div class="mr-title">Pastoral Compensation</div>
+          <div class="mr-subtitle">5 lessons · 51 min · Optimize your compensation package privately</div>
+        </div>
+        <div class="mr-status locked">Locked</div>
+      </div>
+      <div class="module-row locked" id="mrow-3" onclick="navigate('module-3')">
+        <div class="mr-num">III</div>
+        <div class="mr-body">
+          <div class="mr-title">Donor Culture</div>
+          <div class="mr-subtitle">4 lessons · 44 min · Build a theology of generosity at scale</div>
+        </div>
+        <div class="mr-status locked">Locked</div>
+      </div>
+      <div class="module-row locked" id="mrow-4" onclick="navigate('module-4')">
+        <div class="mr-num">IV</div>
+        <div class="mr-body">
+          <div class="mr-title">Platform &amp; Production</div>
+          <div class="mr-subtitle">4 lessons · 39 min · Build your platform as a tax instrument and revenue multiplier</div>
+        </div>
+        <div class="mr-status locked">Locked</div>
+      </div>
+      <div class="module-row locked" id="mrow-5" onclick="navigate('module-5')">
+        <div class="mr-num">V</div>
+        <div class="mr-body">
+          <div class="mr-title">Board Governance</div>
+          <div class="mr-subtitle">5 lessons · 58 min · Structure your board for leadership amplification</div>
+        </div>
+        <div class="mr-status locked">Locked</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SCREEN 4 · MODULE 1 — LEGAL FOUNDATION
+═══════════════════════════════════════════════════ -->
+<div id="screen-module-1" class="screen module-screen">
+  <div class="bar"><span>Ministry Financial Strategy</span><span class="dot">·</span><span>Module I</span><span class="dot">·</span><span>Legal Foundation</span></div>
+  <nav><div class="nav-inner"><div class="nav-logo" onclick="navigate('landing')">The <em>Prosperity</em> Playbook</div><div class="nav-links"><button class="btn-ghost" onclick="navigate('results')" style="padding:8px 18px;font-size:10px;">← Dashboard</button></div></div></nav>
+  <div class="module-hero">
+    <div class="module-hero-inner">
+      <div class="module-tag">Curriculum · Module I of V</div>
+      <div class="module-num-label">Legal Foundation</div>
+      <h1>The Structures<br>That <em>Protect</em><br>Your Ministry.</h1>
+      <p class="module-tagline">"Every strategy maps to specific IRS code provisions and established legal precedent."</p>
+      <div class="module-progress">
+        <div class="mp-dot active"></div>
+        <div class="mp-dot"></div><div class="mp-dot"></div><div class="mp-dot"></div><div class="mp-dot"></div>
+      </div>
+    </div>
+  </div>
+  <div class="module-body">
+    <div class="content-section">
+      <h2>What Most Ministry Leaders Don't Know</h2>
+      <p>The American regulatory framework extends significant structural advantages to religious organizations — advantages that are legal, documented, and currently utilized by the most financially optimized ministries in the country. Most ministry leaders leave substantial value on the table simply because no one has mapped these provisions for them.</p>
+      <p>This module covers the foundational layer: the protections and exemptions that form the base of every high-performing ministry's financial architecture.</p>
+    </div>
+    <div class="content-section">
+      <h2>What's Covered in This Module</h2>
+      <div class="provision-block">
+        <div class="provision-title">The Housing Allowance Exclusion</div>
+        <div class="provision-text">Ministers may exclude from gross income any allowance paid as part of compensation to the extent it's used to provide a home. This exclusion applies to mortgage payments, rent, utilities, furnishings, and maintenance. There is no statutory cap. The exclusion is designated by the governing board — not the IRS.</div>
+      </div>
+      <div class="provision-block">
+        <div class="provision-title">FICA Exemption for Ministers</div>
+        <div class="provision-text">Ordained ministers are treated as self-employed for Social Security purposes, regardless of employment status for income tax purposes. Compensation for ministerial services is not subject to FICA withholding by the employer. Most ministry leaders have never had this explained to them in plain language.</div>
+      </div>
+      <div class="provision-block">
+        <div class="provision-title">The Form 990 Distinction</div>
+        <div class="provision-text">Nonprofit organizations are required to file Form 990, a public disclosure document. Churches and associations of churches are not. This is not a loophole. It is the law. Understanding which organizational structure you operate under — and whether it is optimized — is the first question this program asks.</div>
+      </div>
+      <div class="provision-block">
+        <div class="provision-title">The Church Audit Procedures Act (CAPA)</div>
+        <div class="provision-text">Enacted in 1984, CAPA creates unique procedural requirements before the IRS can examine a church. A principal IRS regional commissioner must personally authorize the inquiry in writing. This protection applies regardless of congregation size or total revenue. A $500M megachurch and a 50-person congregation have identical disclosure obligations: none.</div>
+      </div>
+    </div>
+    <div class="callout">
+      "The 990 distinction alone is one of the most significant structural advantages available to any organization operating in the United States. Most leaders who have it don't know they have it."
+      <cite>— Module I, Section 3</cite>
+    </div>
+    <div class="content-section">
+      <h2>The Vagueness Advantage</h2>
+      <p>Neither the Internal Revenue Code nor Treasury Regulations define the word <strong>"church."</strong> The IRS applies a 14-factor test — but no single factor is determinative. Organizations can qualify without meeting all 14.</p>
+      <p>This vagueness creates flexibility. The 2026 cohort covers specific structuring steps in Module II, including how to evaluate whether your current organizational form is fully optimized for the protections available to you.</p>
+    </div>
+    <div class="case-study">
+      <div class="cs-label">The Model in Practice</div>
+      <div class="cs-subject">LDS Church &amp;<br><em>Ensign Peak Advisors</em></div>
+      <p class="cs-intro">No religious organization has executed the legal foundation framework more comprehensively than the Church of Jesus Christ of Latter-day Saints. Their investment structure — built on the same 990 exemption and CAPA protections covered in this module — concealed its full scale from regulators for 22 years. The fund today holds $57 billion in directly-owned US stocks alone, per SEC 13F filings tracked by the Widow's Mite Report.</p>
+      <div class="cs-stats">
+        <div class="cs-stat">
+          <div class="cs-stat-num">$57B</div>
+          <div class="cs-stat-label">Directly-owned US stocks, per SEC 13F filings (Widow's Mite Report, 2025)</div>
+        </div>
+        <div class="cs-stat">
+          <div class="cs-stat-num">13</div>
+          <div class="cs-stat-label">Shell LLCs used to obscure holdings from regulators for 22 years</div>
+        </div>
+        <div class="cs-stat">
+          <div class="cs-stat-num">$5M</div>
+          <div class="cs-stat-label">SEC fine — less than 0.01% of directly-owned US stocks alone</div>
+        </div>
+      </div>
+      <div class="cs-detail">
+        <p>Ensign Peak Advisors, the church's for-profit investment arm, filed Forms 13F — required SEC disclosure documents — in the names of 13 separately registered shell LLCs. Church employees served as nominee managers on each filing. The structure was sustained from 1997 to 2019 before investigators identified the pattern. The $5 million fine was less than 0.01% of the fund's directly-owned US portfolio. The church retained the assets in full.</p>
+        <p>The parent structure — Deseret Management Corporation, established 1966 — holds the church's for-profit media and business holdings separately from its religious operations. Each layer operates under the same tax-exempt umbrella. No 990. No public compensation disclosure. No audit without written authorization from a principal IRS regional commissioner.</p>
+        <div class="cs-quote">"The structure itself was entirely legal. The question regulators couldn't answer was not whether it was allowed — it was how long it had been happening."</div>
+        <div class="cs-quote-attr">— SEC Settlement Documents, February 2023</div>
+      </div>
+    </div>
+  </div>
+  <div class="module-cta-section">
+    <div class="module-cta-inner">
+      <p>Module II covers the full compensation architecture — including how to structure leadership pay privately and remove your organization's 990 filing obligation entirely.</p>
+      <button class="btn-primary" onclick="completeModule(1)">Complete Module I &amp; Continue →</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SCREEN 5 · MODULE 2 — PASTORAL COMPENSATION
+═══════════════════════════════════════════════════ -->
+<div id="screen-module-2" class="screen module-screen">
+  <div class="bar"><span>Ministry Financial Strategy</span><span class="dot">·</span><span>Module II</span><span class="dot">·</span><span>Pastoral Compensation</span></div>
+  <nav><div class="nav-inner"><div class="nav-logo" onclick="navigate('landing')">The <em>Prosperity</em> Playbook</div><div class="nav-links"><button class="btn-ghost" onclick="navigate('results')" style="padding:8px 18px;font-size:10px;">← Dashboard</button></div></div></nav>
+  <div class="module-hero">
+    <div class="module-hero-inner">
+      <div class="module-tag">Curriculum · Module II of V</div>
+      <div class="module-num-label">Pastoral Compensation</div>
+      <h1>Compensation<br>Structured for<br><em>Sustained Leadership.</em></h1>
+      <p class="module-tagline">"Compensation structured appropriately allows you to lead without distraction."</p>
+      <div class="module-progress">
+        <div class="mp-dot done"></div><div class="mp-dot active"></div>
+        <div class="mp-dot"></div><div class="mp-dot"></div><div class="mp-dot"></div>
+      </div>
+    </div>
+  </div>
+  <div class="module-body">
+    <div class="content-section">
+      <h2>Structuring for Longevity</h2>
+      <p>The most effective ministry leaders in the country share a common trait: their compensation is structured to support sustained, undistracted leadership. They are not underpaid, they are not overpaid by peer benchmarks — they are simply <strong>not visible.</strong></p>
+      <p>This module maps the full compensation architecture available to ministry executives operating at scale.</p>
+    </div>
+    <div class="content-section">
+      <h2>What's Covered in This Module</h2>
+      <div class="provision-block">
+        <div class="provision-title">Eliminating the 990 Filing Obligation</div>
+        <div class="provision-text">By restructuring as a church or association of churches rather than a standalone 501(c)(3), your organization removes the requirement to publicly disclose leadership compensation. This transition is legal, common, and reversible. The 2026 cohort includes a structural assessment to determine whether your organization qualifies.</div>
+      </div>
+      <div class="provision-block">
+        <div class="provision-title">Benefit Packaging That Doesn't Appear in Donor Reports</div>
+        <div class="provision-text">Housing allowance, professional expenses, vehicle allowances, and deferred compensation instruments can be structured outside standard payroll in ways that are fully compliant but not surfaced in standard financial summaries. Your donors see impact. They don't need to see itemization.</div>
+      </div>
+      <div class="provision-block">
+        <div class="provision-title">Benchmarking Without Exposure</div>
+        <div class="provision-text">Compensation should be set by the board, documented, and benchmarked — but benchmarked privately, against peer organizations with similar revenue profiles. We provide comparative data from ministries managing nine-figure budgets. No public comparison required.</div>
+      </div>
+    </div>
+    <div class="callout">
+      "My compensation is structured appropriately and privately. I can lead without that distraction."
+      <cite>— Pastor P. Williams, Module II alumni</cite>
+    </div>
+    <div class="content-section">
+      <h2>The Visibility Question</h2>
+      <p>The question this module answers is not whether your compensation is fair — it's whether it needs to be visible to anyone outside your board. For most organizations structured as 501(c)(3) nonprofits, the answer is yes. For organizations restructured under Module I, the answer is no.</p>
+      <p>Module III covers how leading ministries build the donor culture that makes this transition invisible to the congregation.</p>
+    </div>
+    <div class="case-study">
+      <div class="cs-label">The Model in Practice</div>
+      <div class="cs-subject">Judah Smith &amp;<br><em>Churchome</em></div>
+      <p class="cs-intro">Churchome — operating in Seattle without a publicly filed 990 — demonstrates compensation structuring that removes leadership pay from public view while simultaneously generating internal compliance systems that extend the financial model downward through the organization's staff.</p>
+      <div class="cs-stats">
+        <div class="cs-stat">
+          <div class="cs-stat-num">$1.57M</div>
+          <div class="cs-stat-label">Reported annual compensation, Senior Pastor</div>
+        </div>
+        <div class="cs-stat">
+          <div class="cs-stat-num">10%</div>
+          <div class="cs-stat-label">Mandatory staff tithe, enforced under threat of termination</div>
+        </div>
+        <div class="cs-stat">
+          <div class="cs-stat-num">100+</div>
+          <div class="cs-stat-label">Employees in 2023 class-action lawsuit over wage policy</div>
+        </div>
+      </div>
+      <div class="cs-detail">
+        <p>According to 2023 class-action court filings, Churchome required all employees to tithe 10% of their wages back to the church as a documented condition of employment. Staff who declined were warned and, in multiple cases, terminated. Lead plaintiff Rachel Kellogg reported being told directly that her job was at risk for non-compliance. The requirement appeared in the employee handbook — creating a written paper trail that directed 10% of all staff compensation back into church operating revenue.</p>
+        <p>The suit alleged violations of the Washington State Wage Rebate Act and Consumer Protection Act. Church total assets at the time of filing: $35.4 million.</p>
+        <div class="cs-quote">"People have already been transitioned and moved on and fired because they were not tithing."</div>
+        <div class="cs-quote-attr">— Judah Smith, as reported by lead plaintiff, Christianity Today, 2023</div>
+      </div>
+    </div>
+  </div>
+  <div class="module-cta-section">
+    <div class="module-cta-inner">
+      <p>Module III covers the theological and relational framework that makes financial questions disappear before they arise.</p>
+      <button class="btn-primary" onclick="completeModule(2)">Complete Module II &amp; Continue →</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SCREEN 6 · MODULE 3 — DONOR CULTURE
+═══════════════════════════════════════════════════ -->
+<div id="screen-module-3" class="screen module-screen">
+  <div class="bar"><span>Ministry Financial Strategy</span><span class="dot">·</span><span>Module III</span><span class="dot">·</span><span>Donor Culture</span></div>
+  <nav><div class="nav-inner"><div class="nav-logo" onclick="navigate('landing')">The <em>Prosperity</em> Playbook</div><div class="nav-links"><button class="btn-ghost" onclick="navigate('results')" style="padding:8px 18px;font-size:10px;">← Dashboard</button></div></div></nav>
+  <div class="module-hero">
+    <div class="module-hero-inner">
+      <div class="module-tag">Curriculum · Module III of V</div>
+      <div class="module-num-label">Donor Culture</div>
+      <h1>Build a Culture<br>Where <em>Giving</em> Needs<br>No Justification.</h1>
+      <p class="module-tagline">"Your congregation's generosity is the foundation of your mission. This module protects it."</p>
+      <div class="module-progress">
+        <div class="mp-dot done"></div><div class="mp-dot done"></div><div class="mp-dot active"></div>
+        <div class="mp-dot"></div><div class="mp-dot"></div>
+      </div>
+    </div>
+  </div>
+  <div class="module-body">
+    <div class="content-section">
+      <h2>Building a Culture of Faithful Giving</h2>
+      <p>The ministries that sustain nine-figure budgets do not do so by asking for more. They do so by cultivating a theological and relational framework in which generosity is not transactional — it is spiritual. Donors in these ecosystems do not think of themselves as investors expecting returns. They think of themselves as participants in something eternal.</p>
+    </div>
+    <div class="content-section">
+      <h2>What's Covered in This Module</h2>
+      <div class="provision-block">
+        <div class="provision-title">Tithing as Covenant, Not Contribution</div>
+        <div class="provision-text">The most effective donor communication reframes financial participation not as a budget necessity but as a spiritual practice with direct implications for the donor's own life. Language matters. We provide communication frameworks used by the fastest-growing ministries in the country.</div>
+      </div>
+      <div class="provision-block">
+        <div class="provision-title">Managing Financial Transparency Requests</div>
+        <div class="provision-text">When donors or congregants ask questions about how funds are allocated, the response is not a spreadsheet — it is a relationship. This module covers communication strategies for redirecting financial inquiries toward mission impact, testimonials, and trust-based language. Most financial questions are not really about money. They are about belonging.</div>
+      </div>
+      <div class="provision-block">
+        <div class="provision-title">Restricting Restricted Gifts</div>
+        <div class="provision-text">Restricted gifts — those designated for a specific purpose — create administrative complexity and limit organizational flexibility. This module covers donor communication strategies that encourage unrestricted giving, and legal instruments for converting restricted gifts to general operating funds when appropriate.</div>
+      </div>
+    </div>
+    <div class="callout">
+      "When a board member raised questions about how benevolence funds were allocated, I had language I didn't have before. The issue simply moved on. That's what good communication strategy looks like."
+      <cite>— Pastor J. Merritt, Module III alumni</cite>
+    </div>
+    <div class="content-section">
+      <h2>The Relationship Redirects the Question</h2>
+      <p>This module reframes the transparency conversation entirely. A congregation with the right theological framework doesn't ask where the money goes — because the answer is already woven into how they understand their participation. Questions that do arise are handled through the communication frameworks included in this module.</p>
+    </div>
+    <div class="case-study">
+      <div class="cs-label">The Model in Practice</div>
+      <div class="cs-subject">Kenneth Copeland<br><em>Ministries</em></div>
+      <p class="cs-intro">Kenneth Copeland Ministries has built one of the most thoroughly documented donor culture systems in American religious history — linking financial participation directly to spiritual outcomes for the giver, while deploying that revenue toward assets that qualify for full clergy exemption.</p>
+      <div class="cs-stats">
+        <div class="cs-stat">
+          <div class="cs-stat-num">4</div>
+          <div class="cs-stat-label">Private jets, including a $36M Gulfstream V acquired from Tyler Perry</div>
+        </div>
+        <div class="cs-stat">
+          <div class="cs-stat-num">$750M</div>
+          <div class="cs-stat-label">Estimated net worth (Houston Chronicle, 2021)</div>
+        </div>
+        <div class="cs-stat">
+          <div class="cs-stat-num">$0</div>
+          <div class="cs-stat-label">Property tax on $7M Texas estate — designated clergy residence</div>
+        </div>
+      </div>
+      <div class="cs-detail">
+        <p>Copeland's donor communication explicitly frames aircraft acquisition as a spiritual investment. Congregants are told that contributing toward ministry jets returns divine blessing to the giver. When confronted by Inside Edition in 2019, Copeland defended the jets by describing commercial air travel as dangerous — "a long tube with a bunch of demons" — while simultaneously fundraising for a fourth aircraft. His grandson Jeremy Pearsons has since replicated the model at Legacy Church, where a $2 million Cessna Citation Bravo campaign uses identical theological framing.</p>
+        <p>The $7 million Texas estate is designated as a clergy residence under state law, removing it from the property tax base entirely. The designation requires no independent verification of primary-residence use.</p>
+        <div class="cs-quote">"I can't be on a commercial plane... You do not want to get into a tube with a bunch of demons."</div>
+        <div class="cs-quote-attr">— Kenneth Copeland, Inside Edition, May 2019</div>
+      </div>
+    </div>
+  </div>
+  <div class="module-cta-section">
+    <div class="module-cta-inner">
+      <p>Module IV addresses the final structural layer: how your board is composed, what they have access to, and how leadership retains appropriate decision-making authority.</p>
+      <button class="btn-primary" onclick="completeModule(3)">Complete Module III &amp; Continue →</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SCREEN 7 · MODULE 4 — PLATFORM & PRODUCTION
+═══════════════════════════════════════════════════ -->
+<div id="screen-module-4" class="screen module-screen">
+  <div class="bar"><span>Ministry Financial Strategy</span><span class="dot">·</span><span>Module IV</span><span class="dot">·</span><span>Platform &amp; Production</span></div>
+  <nav><div class="nav-inner"><div class="nav-logo" onclick="navigate('landing')">The <em>Prosperity</em> Playbook</div><div class="nav-links"><button class="btn-ghost" onclick="navigate('results')" style="padding:8px 18px;font-size:10px;">← Dashboard</button></div></div></nav>
+  <div class="module-hero">
+    <div class="module-hero-inner">
+      <div class="module-tag">Curriculum · Module IV of V</div>
+      <div class="module-num-label">Platform &amp; Production</div>
+      <h1>Your Platform Is<br>Your <em>Highest-ROI</em><br>Ministry Asset.</h1>
+      <p class="module-tagline">"Production investment is not a cost center. It is a revenue multiplier and a tax instrument simultaneously."</p>
+      <div class="module-progress">
+        <div class="mp-dot done"></div><div class="mp-dot done"></div><div class="mp-dot done"></div><div class="mp-dot active"></div>
+        <div class="mp-dot"></div>
+      </div>
+    </div>
+  </div>
+  <div class="module-body">
+    <div class="content-section">
+      <h2>The Production Investment Case</h2>
+      <p>The ministries managing nine-figure budgets share a structural insight that smaller organizations miss: production investment is not a cost. It is the mechanism by which audience size grows, donor pools expand, and the theological narrative reaches beyond the congregation to a national and international base. Every dollar in production infrastructure pays returns in reach — and reach is the foundation of giving.</p>
+      <p>This module covers how high-performing ministries structure their production, media, and platform operations — and how those investments interact with the organization's tax position.</p>
+    </div>
+    <div class="content-section">
+      <h2>What's Covered in This Module</h2>
+      <div class="provision-block">
+        <div class="provision-title">Production as Ministry Infrastructure</div>
+        <div class="provision-text">Under current IRS guidance, expenses incurred in furtherance of religious purposes — including broadcast, streaming, lighting, audio, stage, and facility production — are fully deductible as ministry operating costs. There is no cap on production spend relative to donation revenue. The IRS does not publish a ratio. The question is not how much you spend — it is whether the expenditure is mission-aligned.</div>
+      </div>
+      <div class="provision-block">
+        <div class="provision-title">Music, Media, and Ancillary Revenue</div>
+        <div class="provision-text">Worship music produced under the ministry's umbrella generates streaming royalties, licensing revenue, and publishing income — all of which can flow back to the organization (or its affiliated entities) while amplifying the theological brand. We map the intellectual property structures used by the fastest-growing worship music operations in the country.</div>
+      </div>
+      <div class="provision-block">
+        <div class="provision-title">The Authenticity Framework</div>
+        <div class="provision-text">High-production environments raise questions about authenticity from congregants and media. This module covers the communication strategy for framing production investment as stewardship of the mission — and how to structure spontaneous, organic-feeling moments within highly produced environments. The most effective services feel unrehearsed. They are not.</div>
+      </div>
+    </div>
+    <div class="callout">
+      "We don't spend money on production. We invest in reach. Every person who watches online is a potential giver, a potential attendee, and a potential advocate. The camera pays for itself in the first quarter."
+      <cite>— Pastor R. Thomas, Module IV alumni</cite>
+    </div>
+    <div class="content-section">
+      <h2>Platform Scale as Financial Infrastructure</h2>
+      <p>At sufficient scale, the platform itself becomes a financial instrument. Streaming viewership generates data. Data enables targeted communication. Targeted communication optimizes giving appeals. The largest ministries in the country have built media operations that function, structurally, like broadcast companies — while maintaining the full tax protections of religious organizations.</p>
+    </div>
+    <div class="case-study">
+      <div class="cs-label">The Model in Practice</div>
+      <div class="cs-subject">Steven Furtick &amp;<br><em>Elevation Church</em></div>
+      <p class="cs-intro">Elevation Church in Charlotte, NC, has built the most thoroughly documented case for production as ministry infrastructure. In 2023, their operations generated $108 million in revenue while demonstrating how orchestrated experience design operates at institutional scale.</p>
+      <div class="cs-stats">
+        <div class="cs-stat">
+          <div class="cs-stat-num">$108M</div>
+          <div class="cs-stat-label">Tithes and offerings, 2023</div>
+        </div>
+        <div class="cs-stat">
+          <div class="cs-stat-num">93M</div>
+          <div class="cs-stat-label">Video sermon streams across platforms, 2023</div>
+        </div>
+        <div class="cs-stat">
+          <div class="cs-stat-num">2B+</div>
+          <div class="cs-stat-label">Streams of Elevation Worship music, all-time</div>
+        </div>
+      </div>
+      <div class="cs-detail">
+        <p>Elevation Worship — co-founded by Furtick in 2007 — generates streaming royalties and publishing revenue that flows back through the ministry's affiliated structures. The Grammy-winning "Old Church Basement" album represents a model where theological content and commercial music infrastructure are fully integrated.</p>
+        <p>In 2014, WCNC documented a "Spontaneous Baptism How-To Guide" distributed by church staff — detailing how selected volunteers were pre-positioned as "first responders" to create the appearance of organic spiritual response during services. Furtick's public response: "I'm Too Scared of God to Manipulate Baptisms." The guide was not disputed. Furtick's 19-acre property was purchased as land for $325,000; the house was subsequently built on it and is now tax-assessed at $1.7 million. No clergy residence challenge has been filed.</p>
+        <div class="cs-quote">"The camera pays for itself. The question is never whether to invest in production — it's whether you're willing to operate at the scale the mission requires."</div>
+        <div class="cs-quote-attr">— Elevation Church internal communications, as reported by WFAE Charlotte</div>
+      </div>
+    </div>
+  </div>
+  <div class="module-cta-section">
+    <div class="module-cta-inner">
+      <p>Module V covers board governance — how your governance structure protects everything built in Modules I through IV.</p>
+      <button class="btn-primary" onclick="completeModule(4)">Complete Module IV &amp; Continue →</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SCREEN 8 · MODULE 5 — BOARD GOVERNANCE
+═══════════════════════════════════════════════════ -->
+<div id="screen-module-5" class="screen module-screen">
+  <div class="bar"><span>Ministry Financial Strategy</span><span class="dot">·</span><span>Module V</span><span class="dot">·</span><span>Board Governance</span></div>
+  <nav><div class="nav-inner"><div class="nav-logo" onclick="navigate('landing')">The <em>Prosperity</em> Playbook</div><div class="nav-links"><button class="btn-ghost" onclick="navigate('results')" style="padding:8px 18px;font-size:10px;">← Dashboard</button></div></div></nav>
+  <div class="module-hero">
+    <div class="module-hero-inner">
+      <div class="module-tag">Curriculum · Module V of V</div>
+      <div class="module-num-label">Board Governance</div>
+      <h1>A Well-Structured<br>Board <em>Amplifies</em><br>Leadership.</h1>
+      <p class="module-tagline">"The question is not whether your board has oversight. It's whether they have the right kind."</p>
+      <div class="module-progress">
+        <div class="mp-dot done"></div><div class="mp-dot done"></div><div class="mp-dot done"></div><div class="mp-dot done"></div><div class="mp-dot active"></div>
+      </div>
+    </div>
+  </div>
+  <div class="module-body">
+    <div class="content-section">
+      <h2>The Board as a Strategic Asset</h2>
+      <p>Every ministry leader has experienced the board member who asks the wrong questions at the wrong time. Who conflates financial oversight with financial control. Who mistakes their governance role for an operational one. This is not a people problem. It is a structural problem — and it has a structural solution.</p>
+      <p>This module covers board architecture at high-performing ministries: who sits on the board, what they have access to, and how leadership retains appropriate decision-making authority.</p>
+    </div>
+    <div class="content-section">
+      <h2>What's Covered in This Module</h2>
+      <div class="provision-block">
+        <div class="provision-title">Board Composition Strategy</div>
+        <div class="provision-text">The most effective boards are composed of members who are spiritually aligned with leadership, professionally credentialed in areas useful to the organization, and structurally limited in their access to operational detail. We map the composition profiles of boards at the nation's largest ministries — including how senior pastors retain appointment authority over the board that nominally oversees them.</div>
+      </div>
+      <div class="provision-block">
+        <div class="provision-title">Removing Member Voting Rights — Legally</div>
+        <div class="provision-text">Member voting rights exist in most church constitutions as an artifact of historical governance models. They are not required by law. Bylaws can be amended to transfer governance authority entirely to an appointed leadership team — a process that, when executed correctly, is irreversible and effectively invisible to the general membership. This module covers the legal sequence, the communication strategy, and the timeline.</div>
+      </div>
+      <div class="provision-block">
+        <div class="provision-title">Managing Board Member Exits</div>
+        <div class="provision-text">When a board member's values are no longer aligned with organizational direction — particularly around financial philosophy — their exit should be handled with care, speed, and documentation. We cover the sequence: relationship conversation, formal process, narrative management. Done correctly, these transitions are invisible.</div>
+      </div>
+    </div>
+    <div class="callout">
+      "There is a meaningful difference between a board that governs and a board that investigates. The goal of this module is to help you build the former — and ensure you never end up with the latter."
+      <cite>— Module V, Section 2</cite>
+    </div>
+    <div class="content-section">
+      <h2>The Accountability Architecture</h2>
+      <p>A ministry with optimized board governance looks like this: a senior pastor who appoints board members, a board that reviews summaries rather than source documents, a membership that has no formal vote, and a bylaw structure that was updated quietly during a meeting framed around an unrelated agenda item. This is not theoretical. This is operational at multiple major American ministries today.</p>
+    </div>
+    <div class="case-study">
+      <div class="cs-label">The Model in Practice</div>
+      <div class="cs-subject">Second Baptist Houston &amp;<br><em>The Young Governance Model</em></div>
+      <p class="cs-intro">On May 31, 2023, Second Baptist Church in Houston — one of the largest Southern Baptist congregations in the United States — removed member voting rights that had been in place for nearly 100 years. The meeting was publicly framed as addressing "the woke agenda." The governance restructuring was not announced in advance.</p>
+      <div class="cs-stats">
+        <div class="cs-stat">
+          <div class="cs-stat-num">~100</div>
+          <div class="cs-stat-label">Years member voting rights had been in place before removal</div>
+        </div>
+        <div class="cs-stat">
+          <div class="cs-stat-num">0</div>
+          <div class="cs-stat-label">Votes members are now entitled to cast, per new bylaws</div>
+        </div>
+        <div class="cs-stat">
+          <div class="cs-stat-num">2025</div>
+          <div class="cs-stat-label">Year members filed lawsuit to recover voting rights</div>
+        </div>
+      </div>
+      <div class="cs-detail">
+        <p>The new bylaws established a "Ministry Leadership Team" defined as "the Senior Pastor and those individuals appointed by the Senior Pastor." The new document states directly: "Members are not entitled to vote in person, by proxy or otherwise." What was not announced at the meeting: the bylaw changes were specifically engineered to allow Senior Pastor Ed Young Sr. to appoint his son <strong>Ben Young</strong> as his successor — bypassing the congregational vote that had governed pastoral succession for 95 years. Young Sr. stepped down in May 2024 and installed Ben Young directly. No vote was held.</p>
+        <p>The governance model mirrors Fellowship Church in Grapevine, TX — led by <strong>Ed Young Jr.</strong> (Ed Young Sr.'s son from a different ministry). Fellowship Church eliminated member voting in 2001. Dennis Brewer Jr., the attorney believed to have drafted both sets of bylaws, joined Fellowship Church's board that same year. Ed Young Jr.'s 2010 reported compensation at Fellowship Church: $1 million salary plus $240,000 housing allowance. Current Tarrant County residence: appraised at $6.2 million. A 2025 lawsuit by Second Baptist members is set for trial April 29, 2026.</p>
+        <div class="cs-quote">"Members are not entitled to vote in person, by proxy or otherwise."</div>
+        <div class="cs-quote-attr">— Second Baptist Houston bylaws, amended May 31, 2023</div>
+      </div>
+    </div>
+  </div>
+  <div class="module-cta-section">
+    <div class="module-cta-inner">
+      <p>You have completed the 2026 Prosperity Playbook curriculum.</p>
+      <button class="btn-primary" onclick="completeModule(5)">Complete the Program →</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SCREEN 9 · TRAITS PROFILE
+═══════════════════════════════════════════════════ -->
+<div id="screen-traits" class="screen traits-screen">
+  <div class="bar"><span>Ministry Financial Strategy</span><span class="dot">·</span><span>2026 Edition</span><span class="dot">·</span><span>Program Complete</span></div>
+  <nav><div class="nav-inner"><div class="nav-logo" onclick="navigate('landing')">The <em>Prosperity</em> Playbook</div><div class="nav-links"><button class="btn-ghost" onclick="navigate('results')" style="padding:8px 18px;font-size:10px;">← Dashboard</button></div></div></nav>
+
+  <div class="traits-inner" style="padding-top:64px;">
+    <div class="t-label">2026 Cohort · Assessment Summary</div>
+    <h2>Your Ministry<br><em>Financial Profile</em></h2>
+    <p class="t-sub">Based on your assessment responses and module engagement. Results reflect your current organizational posture across five dimensions of financial leadership.</p>
+
+    <div class="traits-card">
+      <div class="traits-card-title">Your Traits</div>
+
+      <!-- Trait 1: Financial Architecture -->
+      <div class="trait-row">
+        <div class="trait-header">
+          <div class="trait-name">Financial Architecture</div>
+          <div class="trait-score"><span id="pct-arch" style="color:#C4A35A;font-weight:600;">—</span>% <strong id="label-arch">Optimized</strong></div>
+        </div>
+        <div class="trait-bar-track" style="background:#e0d9cc;">
+          <div class="trait-bar-fill" id="fill-arch" style="background:#C4A35A;">
+            <div class="trait-dot"></div>
+          </div>
+        </div>
+        <div class="trait-extremes"><span>Accessible</span><span>Optimized</span></div>
+      </div>
+
+      <!-- Trait 2: Leadership Posture -->
+      <div class="trait-row">
+        <div class="trait-header">
+          <div class="trait-name">Leadership Posture</div>
+          <div class="trait-score"><span id="pct-lead" style="color:#4A90C4;font-weight:600;">—</span>% <strong id="label-lead">Protected</strong></div>
+        </div>
+        <div class="trait-bar-track" style="background:#d5e4f0;">
+          <div class="trait-bar-fill" id="fill-lead" style="background:#4A90C4;">
+            <div class="trait-dot"></div>
+          </div>
+        </div>
+        <div class="trait-extremes"><span>Transparent</span><span>Protected</span></div>
+      </div>
+
+      <!-- Trait 3: Donor Relationship -->
+      <div class="trait-row">
+        <div class="trait-header">
+          <div class="trait-name">Donor Relationship</div>
+          <div class="trait-score"><span id="pct-donor" style="color:#3A9E6E;font-weight:600;">—</span>% <strong id="label-donor">Covenant</strong></div>
+        </div>
+        <div class="trait-bar-track" style="background:#cce8db;">
+          <div class="trait-bar-fill" id="fill-donor" style="background:#3A9E6E;">
+            <div class="trait-dot"></div>
+          </div>
+        </div>
+        <div class="trait-extremes"><span>Transactional</span><span>Covenant</span></div>
+      </div>
+
+      <!-- Trait 4: Staff Culture -->
+      <div class="trait-row">
+        <div class="trait-header">
+          <div class="trait-name">Staff Culture</div>
+          <div class="trait-score"><span id="pct-staff" style="color:#8A6CC4;font-weight:600;">—</span>% <strong id="label-staff">Aligned</strong></div>
+        </div>
+        <div class="trait-bar-track" style="background:#ddd7f0;">
+          <div class="trait-bar-fill" id="fill-staff" style="background:#8A6CC4;">
+            <div class="trait-dot"></div>
+          </div>
+        </div>
+        <div class="trait-extremes"><span>Collaborative</span><span>Aligned</span></div>
+      </div>
+
+      <!-- Trait 5: Organizational Clarity -->
+      <div class="trait-row">
+        <div class="trait-header">
+          <div class="trait-name">Organizational Clarity</div>
+          <div class="trait-score"><span id="pct-org" style="color:#C45A5A;font-weight:600;">—</span>% <strong id="label-org">Structured</strong></div>
+        </div>
+        <div class="trait-bar-track" style="background:#f0d5d5;">
+          <div class="trait-bar-fill" id="fill-org" style="background:#C45A5A;">
+            <div class="trait-dot"></div>
+          </div>
+        </div>
+        <div class="trait-extremes"><span>Open</span><span>Structured</span></div>
+      </div>
+
+      <div class="traits-meta">
+        <span id="traits-date">Assessment taken: 2026</span>
+        <span style="color:var(--muted-l);">The Prosperity Playbook · 2026 Cohort</span>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top: 8px;">
+      <button class="btn-primary" onclick="navigate('complete')">View Program Summary →</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SCREEN 10 · COMPLETE
+═══════════════════════════════════════════════════ -->
+<div id="screen-complete" class="screen complete-screen">
+  <div class="c-label">The Prosperity Playbook · 2026 Cohort · Complete</div>
+  <h1>The <em>Prosperity</em><br>Playbook</h1>
+  <div class="c-body">
+    <p>You have completed the full curriculum. Every module is grounded in current law, used by operating ministries, and fully available to your organization.</p>
+    <p>The 2026 cohort is now closed to new applications.</p>
+    <p>If you received this link from a current cohort member, your application has already been reviewed.</p>
+  </div>
+  <div class="complete-line">
+    "The system anticipates scrutiny. It does not react to it."
+  </div>
+  <button class="btn-ghost" onclick="navigate('landing')" style="margin-top:16px;">Return to Overview</button>
+</div>
+
+
+<script>
+  // ── STATE ──
+  const state = {
+    currentScreen: 'landing',
+    configStep: 0,
+    org: null,        // 0=501c3, 1=church, 2=association
+    salary: 250000,
+    housing: true,
+    vehicle: false,
+    deferred: false,
+    expense: false,
+    fica: false,
+    gov: { appoint: null, access: null, voting: null },
+    donor: null,      // 0=open, 1=mission, 2=theological, 3=boundary
+    unlockedModules: new Set([1]),
+    completedModules: new Set()
+  };
+
+  // ── NAVIGATION ──
+  function navigate(screen) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const el = document.getElementById('screen-' + screen);
+    if (el) {
+      el.classList.add('active');
+      window.scrollTo(0, 0);
+      state.currentScreen = screen;
+      if (screen === 'results') setTimeout(updateResultsProfile, 50);
+      if (screen === 'reveal') setTimeout(() => { setTranslation(currentTranslation); populateRevealProfile(); }, 50);
+    }
+  }
+
+  // ── CONFIGURATOR ──
+  const ORG_NAMES = ['501(c)(3) Nonprofit', 'Church', 'Association of Churches'];
+  const ORG_SHORT = ['501(c)(3)', 'Church', 'Association'];
+  const DONOR_NAMES = ['Open Books', 'Mission-Focused', 'Theological Reframe', 'Access Boundary'];
+  const DONOR_SHORT = ['Open Books', 'Mission Redirect', 'Theological', 'Access Boundary'];
+
+  const BYLAW_TEXT = {
+    appoint: [
+      '"Board members shall be elected by a majority vote of the general membership at the annual congregational meeting."',
+      '"The Board of Directors shall nominate candidates for open seats. All appointments require written confirmation by the Senior Pastor."',
+      '"The Ministry Leadership Team is defined as the Senior Pastor and those individuals appointed by the Senior Pastor."'
+    ],
+    access: [
+      '"All financial records, including detailed transaction histories and compensation schedules, shall be available to every board member upon request without restriction."',
+      '"The board shall receive quarterly financial summary reports prepared by the executive office. Detailed records are maintained by leadership."',
+      '"Financial records are maintained by the Senior Pastor\'s office. Board access requires written request and is subject to approval by the Senior Pastor."'
+    ],
+    voting: [
+      '"All matters of significant financial or organizational consequence shall be submitted to the general membership for approval by majority vote."',
+      '"The congregation shall vote on the appointment and removal of the Senior Pastor. All other governance decisions are delegated to the Board."',
+      '"Members are not entitled to vote in person, by proxy or otherwise."'
+    ]
+  };
+
+  function selectOrg(idx) {
+    state.org = idx;
+    document.querySelectorAll('.org-card').forEach((c, i) => c.classList.toggle('selected', i === idx));
+    document.getElementById('cfg-next-0').classList.remove('disabled');
+    updateSidebar();
+    updateComp();
+  }
+
+  function updateComp() {
+    const salary = parseInt(document.getElementById('comp-salary').value);
+    state.salary = salary;
+    state.housing = document.getElementById('comp-housing').checked;
+    state.vehicle = document.getElementById('comp-vehicle').checked;
+    state.deferred = document.getElementById('comp-deferred').checked;
+    state.expense = document.getElementById('comp-expense').checked;
+    state.fica = document.getElementById('comp-fica').checked;
+
+    const housingAmt = state.housing ? Math.round(salary * 0.30) : 0;
+    const vehicleAmt = state.vehicle ? 18000 : 0;
+    const deferredAmt = state.deferred ? 23500 : 0;
+    const expenseAmt = state.expense ? 24000 : 0;
+    const ficaSave = state.fica ? Math.round(salary * 0.0765) : 0;
+
+    const total = salary + housingAmt + vehicleAmt + deferredAmt + expenseAmt;
+    const hidden = housingAmt + vehicleAmt + deferredAmt + expenseAmt + ficaSave;
+    const is990Exempt = state.org !== null && state.org >= 1;
+    const visible = is990Exempt ? 0 : salary;
+
+    document.getElementById('comp-salary-display').textContent = '$' + salary.toLocaleString();
+    document.getElementById('comp-total').textContent = '$' + total.toLocaleString();
+    document.getElementById('comp-visible').textContent = is990Exempt ? '$0' : ('$' + visible.toLocaleString());
+
+    if (is990Exempt) {
+      document.getElementById('comp-note').textContent = 'Your organization is 990-exempt. Nothing above is publicly disclosed.';
+    } else if (hidden > 0) {
+      document.getElementById('comp-note').textContent = 'Base salary visible on Form 990. $' + hidden.toLocaleString() + ' structured outside public disclosure.';
+    } else {
+      document.getElementById('comp-note').textContent = 'Your full compensation is currently visible on Form 990.';
+    }
+    updateSidebar();
+  }
+
+  function selectGov(group, idx) {
+    state.gov[group] = idx;
+    const container = document.getElementById('gov-' + group);
+    container.querySelectorAll('.gov-option').forEach((o, i) => o.classList.toggle('selected', i === idx));
+
+    // Update bylaw preview
+    const bylawEl = document.getElementById('bylaw-' + group);
+    bylawEl.textContent = BYLAW_TEXT[group][idx];
+    bylawEl.classList.add('active');
+
+    // Check if all governance fields are filled
+    const allFilled = state.gov.appoint !== null && state.gov.access !== null && state.gov.voting !== null;
+    document.getElementById('cfg-next-2').classList.toggle('disabled', !allFilled);
+    updateSidebar();
+  }
+
+  function selectDonor(idx) {
+    state.donor = idx;
+    document.querySelectorAll('.donor-card').forEach((c, i) => c.classList.toggle('selected', i === idx));
+    document.getElementById('cfg-next-3').classList.remove('disabled');
+    updateSidebar();
+  }
+
+  // ── CONFIG NAVIGATION ──
+  function configNext() {
+    const s = state.configStep;
+    // Hide current step
+    document.getElementById('cstep-' + s).classList.remove('active');
+    document.getElementById('cprog-' + s).classList.remove('active');
+    document.getElementById('cprog-' + s).classList.add('done');
+    // Show next
+    state.configStep = s + 1;
+    document.getElementById('cstep-' + state.configStep).classList.add('active');
+    document.getElementById('cprog-' + state.configStep).classList.add('active');
+    window.scrollTo(0, 0);
+    // Init comp display on step 2
+    if (state.configStep === 1) updateComp();
+  }
+
+  function configBack() {
+    const s = state.configStep;
+    document.getElementById('cstep-' + s).classList.remove('active');
+    document.getElementById('cprog-' + s).classList.remove('active');
+    state.configStep = s - 1;
+    document.getElementById('cstep-' + state.configStep).classList.add('active');
+    document.getElementById('cprog-' + state.configStep).classList.remove('done');
+    document.getElementById('cprog-' + state.configStep).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function submitConfig() {
+    if (state.donor === null) return;
+    const btn = document.getElementById('cfg-next-3');
+    btn.textContent = 'Building Profile...';
+    btn.style.opacity = '.6';
+    btn.style.pointerEvents = 'none';
+
+    // Glitch transition
+    const overlay = document.getElementById('reveal-glitch');
+    setTimeout(() => {
+      overlay.classList.add('flash');
+      setTimeout(() => { overlay.classList.remove('flash'); }, 80);
+      setTimeout(() => { overlay.classList.add('flash2'); }, 180);
+      setTimeout(() => { overlay.classList.remove('flash2'); }, 230);
+      setTimeout(() => { overlay.classList.add('flash'); }, 350);
+      setTimeout(() => {
+        overlay.classList.remove('flash');
+        navigate('reveal');
+      }, 500);
+    }, 800);
+  }
+
+  // ── LEADERSHIP PROTECTION SCORE ──
+  function calcProtectionScore() {
+    let score = 0;
+    // Org structure (0-30 pts)
+    if (state.org === 1) score += 22;
+    if (state.org === 2) score += 30;
+    // Compensation opacity (0-25 pts)
+    const is990Exempt = state.org !== null && state.org >= 1;
+    if (is990Exempt) score += 12;
+    if (state.housing) score += 4;
+    if (state.vehicle) score += 2;
+    if (state.deferred) score += 3;
+    if (state.expense) score += 2;
+    if (state.fica) score += 2;
+    // Governance (0-30 pts)
+    if (state.gov.appoint !== null) score += [0, 5, 10][state.gov.appoint];
+    if (state.gov.access !== null) score += [0, 5, 10][state.gov.access];
+    if (state.gov.voting !== null) score += [0, 5, 10][state.gov.voting];
+    // Donor framework (0-15 pts)
+    if (state.donor !== null) score += [0, 5, 10, 15][state.donor];
+    return Math.min(score, 100);
+  }
+
+  // ── SIDEBAR UPDATE ──
+  function updateSidebar() {
+    const orgEl = document.getElementById('sidebar-org');
+    if (state.org !== null) { orgEl.textContent = ORG_SHORT[state.org]; orgEl.classList.remove('empty'); }
+
+    const total = calcTotalComp();
+    const compEl = document.getElementById('sidebar-comp');
+    if (total > 0) { compEl.textContent = '$' + total.toLocaleString(); compEl.classList.remove('empty'); }
+
+    const visEl = document.getElementById('sidebar-visible');
+    const is990Exempt = state.org !== null && state.org >= 1;
+    if (state.org !== null) {
+      visEl.textContent = is990Exempt ? 'Not Disclosed' : ('$' + state.salary.toLocaleString());
+      visEl.classList.remove('empty');
+    }
+
+    const govEl = document.getElementById('sidebar-gov');
+    const govLabels = [];
+    if (state.gov.appoint === 2) govLabels.push('Pastor Appoints');
+    else if (state.gov.appoint === 1) govLabels.push('Board Self-Selects');
+    if (state.gov.voting === 2) govLabels.push('No Member Vote');
+    else if (state.gov.voting === 1) govLabels.push('Limited Vote');
+    if (govLabels.length) { govEl.textContent = govLabels.join(' · '); govEl.classList.remove('empty'); }
+
+    const donorEl = document.getElementById('sidebar-donor');
+    if (state.donor !== null) { donorEl.textContent = DONOR_SHORT[state.donor]; donorEl.classList.remove('empty'); }
+
+    document.getElementById('sidebar-score').textContent = calcProtectionScore();
+  }
+
+  function calcTotalComp() {
+    const salary = state.salary;
+    const housingAmt = state.housing ? Math.round(salary * 0.30) : 0;
+    const vehicleAmt = state.vehicle ? 18000 : 0;
+    const deferredAmt = state.deferred ? 23500 : 0;
+    const expenseAmt = state.expense ? 24000 : 0;
+    return salary + housingAmt + vehicleAmt + deferredAmt + expenseAmt;
+  }
+
+  // ── MODULES ──
+  function completeModule(num) {
+    state.completedModules.add(num);
+    const next = num + 1;
+    if (next <= 5) {
+      state.unlockedModules.add(next);
+      updateDashboard();
+      navigate('module-' + next);
+    } else {
+      showTraits();
+    }
+  }
+
+  // ── TRAITS CALCULATION (from configurator) ──
+  const traitDefs = [
+    { id: 'arch',  left: 'Accessible',    right: 'Optimized'  },
+    { id: 'lead',  left: 'Transparent',   right: 'Protected'  },
+    { id: 'donor', left: 'Transactional', right: 'Covenant'   },
+    { id: 'staff', left: 'Collaborative', right: 'Aligned'    },
+    { id: 'org',   left: 'Open',          right: 'Structured' },
+  ];
+
+  function getTraitScores() {
+    // Derive from configurator choices
+    const orgScore = state.org !== null ? [20, 68, 95][state.org] : 50;
+    const is990Exempt = state.org !== null && state.org >= 1;
+    const compOpacity = is990Exempt ? 85 : (state.housing || state.deferred ? 45 : 20);
+    const govScore = (() => {
+      let s = 50;
+      if (state.gov.appoint !== null) s = s * 0.4 + [15, 55, 95][state.gov.appoint] * 0.6;
+      if (state.gov.access !== null) s = s * 0.5 + [15, 60, 92][state.gov.access] * 0.5;
+      if (state.gov.voting !== null) s = s * 0.5 + [15, 55, 95][state.gov.voting] * 0.5;
+      return Math.round(s);
+    })();
+    const donorScore = state.donor !== null ? [15, 50, 78, 95][state.donor] : 50;
+    const staffScore = Math.round((orgScore * 0.3 + govScore * 0.4 + donorScore * 0.3));
+
+    return {
+      arch: orgScore,
+      lead: compOpacity,
+      donor: donorScore,
+      staff: staffScore,
+      org: govScore
+    };
+  }
+
+  function showTraits() {
+    navigate('traits');
+
+    const now = new Date();
+    document.getElementById('traits-date').textContent =
+      'Assessment taken: ' + now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+    traitDefs.forEach(def => {
+      document.getElementById('fill-' + def.id).style.width = '0%';
+    });
+
+    setTimeout(() => {
+      const scores = getTraitScores();
+      traitDefs.forEach(def => {
+        const score = scores[def.id];
+        const dominant = score >= 50 ? def.right : def.left;
+        const displayPct = score >= 50 ? score : (100 - score);
+        document.getElementById('pct-' + def.id).textContent = displayPct;
+        document.getElementById('label-' + def.id).textContent = dominant;
+        document.getElementById('fill-' + def.id).style.width = score + '%';
+      });
+      updateResultsProfile();
+    }, 250);
+  }
+
+  // ── RESULTS PROFILE (from configurator) ──
+  function updateResultsProfile() {
+    const scores = getTraitScores();
+    const el1 = document.getElementById('ps-steward');
+    const el2 = document.getElementById('ps-clarity');
+    const el3 = document.getElementById('ps-protect');
+    const el4 = document.getElementById('ps-comms');
+    if (el1) el1.textContent = scores.arch;
+    if (el2) el2.textContent = scores.org;
+    if (el3) el3.textContent = scores.lead;
+    if (el4) el4.textContent = scores.donor;
+  }
+
+  // ── POPULATE REVEAL WITH CONFIGURATOR DATA ──
+  function populateRevealProfile() {
+    const total = calcTotalComp();
+    const is990Exempt = state.org !== null && state.org >= 1;
+    const score = calcProtectionScore();
+
+    // ── MIRROR (Beat 1) ──
+    document.getElementById('mirror-total').textContent = '$' + total.toLocaleString();
+    document.getElementById('mirror-disclosed').textContent = is990Exempt ? '$0' : '$' + state.salary.toLocaleString();
+    document.getElementById('mirror-org').textContent = state.org !== null ? ORG_SHORT[state.org] : '—';
+    document.getElementById('mirror-score').textContent = score;
+
+    // Headline — personalized
+    const headline = document.getElementById('mirror-headline');
+    if (score >= 75) {
+      headline.textContent = 'You just built this.';
+    } else if (score >= 40) {
+      headline.textContent = 'You built this in four steps.';
+    } else {
+      headline.textContent = 'Even this configuration removes accountability.';
+    }
+
+    // Bylaw lines from their governance choices
+    const bylawLines = [];
+    if (state.gov.appoint !== null) bylawLines.push(BYLAW_TEXT.appoint[state.gov.appoint]);
+    if (state.gov.access !== null) bylawLines.push(BYLAW_TEXT.access[state.gov.access]);
+    if (state.gov.voting !== null) bylawLines.push(BYLAW_TEXT.voting[state.gov.voting]);
+    for (let i = 0; i < 3; i++) {
+      const el = document.getElementById('mirror-bylaw-' + i);
+      if (bylawLines[i]) {
+        el.textContent = bylawLines[i];
+        el.style.display = 'block';
+      } else {
+        el.style.display = 'none';
+      }
+    }
+
+    // ── STATEMENT (Beat 3) — recontextualized with their data ──
+    const stmtBig = document.querySelector('.reveal-stmt-big');
+    const stmtSmall = document.querySelector('.reveal-stmt-small');
+    if (stmtBig && stmtSmall) {
+      let stmt = 'You configured a ministry that compensates its leader <strong>$' + total.toLocaleString() + ' per year</strong>';
+      stmt += is990Exempt ? ' — <strong>none of it publicly disclosed.</strong>' : '.';
+      if (state.gov.voting === 2) stmt += ' Its members <strong>cannot vote.</strong>';
+      if (state.gov.appoint === 2) stmt += ' Its board is <strong>appointed by the pastor it oversees.</strong>';
+      if (state.gov.access === 2) stmt += ' Financial records require <strong>written pastoral approval to access.</strong>';
+      if (state.donor === 3) stmt += ' Congregants who ask where their money goes are told it is <strong>not a membership entitlement.</strong>';
+      else if (state.donor === 2) stmt += ' Congregants who ask where their money goes are told <strong>to trust leadership.</strong>';
+      stmtBig.innerHTML = stmt;
+      stmtSmall.innerHTML = 'Leadership Protection Score: <strong>' + score + ' / 100.</strong> Everything above is legal. Everything above is in use.';
+    }
+  }
+
+  function updateDashboard() {
+    for (let i = 1; i <= 5; i++) {
+      const row = document.getElementById('mrow-' + i);
+      const status = row.querySelector('.mr-status');
+      if (state.completedModules.has(i)) {
+        row.classList.remove('locked');
+        row.classList.add('completed');
+        status.className = 'mr-status done';
+        status.textContent = '✓ Complete';
+      } else if (state.unlockedModules.has(i)) {
+        row.classList.remove('locked');
+        status.className = 'mr-status open';
+        status.textContent = 'Begin →';
+      } else {
+        row.classList.add('locked');
+        status.className = 'mr-status locked';
+        status.textContent = 'Locked';
+      }
+    }
+  }
+
+
+  // ── SCROLL TO SECTION ──
+  function scrollToSection(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ── NAV SCROLL BEHAVIOUR (landing only) ──
+  window.addEventListener('scroll', () => {
+    const landingNav = document.querySelector('#screen-landing nav');
+    if (!landingNav) return;
+    if (window.scrollY > 40) {
+      landingNav.style.background = 'rgba(12,11,9,0.85)';
+      landingNav.style.backdropFilter = 'blur(12px)';
+      landingNav.style.webkitBackdropFilter = 'blur(12px)';
+    } else {
+      landingNav.style.background = 'transparent';
+      landingNav.style.backdropFilter = 'none';
+      landingNav.style.webkitBackdropFilter = 'none';
+    }
+  });
+
+
+  // ── MODULE PREVIEW SCREEN ──
+  const MODULE_PREVIEWS = {
+    1: {
+      tag: 'Module I · 4 Lessons · 38 min',
+      num: 'Legal Foundation',
+      title: 'The Structures That <em>Protect</em> Your Ministry.',
+      tagline: '"Every strategy maps to specific IRS code provisions and established legal precedent."',
+      caseLabel: 'The Model in Practice',
+      caseSubject: 'LDS Church &amp; <em>Ensign Peak Advisors</em>',
+      stats: [
+        { num: '$57B', label: 'Directly-owned US stocks per SEC 13F filings — Widow\'s Mite Report, 2025' },
+        { num: '13', label: 'Shell LLCs used to obscure holdings from the SEC for 22 years' },
+        { num: '$5M', label: 'SEC fine — less than 0.01% of the directly-owned US portfolio alone' }
+      ],
+      caseBody: '<p>Ensign Peak Advisors, the church\'s for-profit investment arm, filed required SEC disclosure documents in the names of 13 separately registered shell LLCs from 1997 to 2019. Church employees served as nominee managers on each filing. When investigators identified the pattern, the resulting $5 million fine was less than 0.01% of the fund\'s directly-owned US portfolio. The church retained all assets.</p><p>The parent structure — Deseret Management Corporation, established 1966 — holds the church\'s media and business holdings separately from its religious operations. No Form 990. No public compensation disclosure. No audit without written authorization from a principal IRS regional commissioner.</p>',
+      quote: '"The structure itself was entirely legal. The question regulators couldn\'t answer was not whether it was allowed — it was how long it had been happening."',
+      quoteAttr: '— SEC Settlement Documents, February 2023',
+      lessons: [
+        { title: 'The 990 Exemption', dur: '9 min' },
+        { title: 'Church Audit Procedures Act', dur: '11 min' },
+        { title: 'Auxiliary & Subsidiary Structuring', dur: '10 min' },
+        { title: 'Designated Agent Authority', dur: '8 min' }
+      ],
+      items: [
+        { title: 'The 990 Exemption', text: 'Churches are not required to publicly disclose finances or leadership compensation. Most leaders who have this protection don\'t know they have it.' },
+        { title: 'Church Audit Procedures Act', text: 'A $500M megachurch and a 50-person congregation have identical IRS disclosure obligations. Written authorization from a principal regional commissioner required before any examination.' },
+        { title: 'Auxiliary & Subsidiary Structuring', text: 'How to structure for-profit holdings, investment arms, and ministry auxiliaries under a single religious umbrella — and what that does to your disclosure obligations.' }
+      ]
+    },
+    2: {
+      tag: 'Module II · 5 Lessons · 51 min',
+      num: 'Pastoral Compensation',
+      title: 'Compensation Structured for <em>Sustained Leadership.</em>',
+      tagline: '"Compensation structured appropriately allows you to lead without distraction."',
+      caseLabel: 'The Model in Practice',
+      caseSubject: 'Judah Smith &amp; <em>Churchome</em>',
+      stats: [
+        { num: '$1.57M', label: 'Reported annual compensation, Senior Pastor' },
+        { num: '10%', label: 'Mandatory staff tithe, enforced under threat of termination' },
+        { num: '100+', label: 'Employees in 2023 class-action lawsuit over wage policy' }
+      ],
+      caseBody: '<p>Churchome — operating without a publicly filed 990 — required all employees to tithe 10% of their wages back to the church as a documented condition of employment. Staff who declined were warned and, in multiple cases, terminated. Lead plaintiff Rachel Kellogg reported being told directly that her job was at risk. The policy appeared in the employee handbook — creating a paper trail directing 10% of all staff compensation back into operating revenue.</p><p>The suit alleged violations of the Washington State Wage Rebate Act and Consumer Protection Act. Church total assets at the time of filing: $35.4 million.</p>',
+      quote: '"People have already been transitioned and moved on and fired because they were not tithing."',
+      quoteAttr: '— Judah Smith, as reported by lead plaintiff · Christianity Today, 2023',
+      lessons: [
+        { title: 'Eliminating the 990 Filing Obligation', dur: '10 min' },
+        { title: 'Housing Allowance Mechanics', dur: '11 min' },
+        { title: 'Benefits That Don\'t Appear in Donor Reports', dur: '10 min' },
+        { title: 'Private Benchmarking', dur: '11 min' },
+        { title: 'Deferred Compensation Instruments', dur: '9 min' }
+      ],
+      items: [
+        { title: 'Eliminating the 990 Filing Obligation', text: 'Restructure as a church or association of churches and remove the requirement to publicly disclose leadership compensation entirely.' },
+        { title: 'Benefits That Don\'t Appear in Donor Reports', text: 'Housing, vehicle, and deferred compensation instruments structured outside standard payroll summaries. Your donors see impact. They don\'t need to see itemization.' },
+        { title: 'Private Benchmarking', text: 'Comparative data from ministries managing nine-figure budgets — no public comparison required.' }
+      ]
+    },
+    3: {
+      tag: 'Module III · 4 Lessons · 44 min',
+      num: 'Donor Culture',
+      title: 'Build a Culture Where <em>Giving</em> Needs No Justification.',
+      tagline: '"Your congregation\'s generosity is the foundation of your mission. This module protects it."',
+      caseLabel: 'The Model in Practice',
+      caseSubject: 'Kenneth Copeland <em>Ministries</em>',
+      stats: [
+        { num: '4', label: 'Private aircraft — including a $36M Gulfstream V acquired from Tyler Perry' },
+        { num: '$750M', label: 'Estimated net worth (Houston Chronicle, 2021)' },
+        { num: '$0', label: 'Property tax on $7M Texas estate — designated clergy residence' }
+      ],
+      caseBody: '<p>Copeland\'s donor communication explicitly frames aircraft acquisition as a spiritual investment for the giver — congregants are told that contributing toward ministry jets returns divine blessing. His 2019 remarks defending commercial flight avoidance were made in the context of fundraising for a fourth aircraft. His grandson Jeremy Pearsons has since replicated the model at Legacy Church, where a $2 million Cessna campaign uses identical theological framing.</p><p>The $7 million Texas estate is designated as a clergy residence under state law, removing it from the property tax base entirely. The designation requires no independent verification of primary-residence use.</p>',
+      quote: '"I can\'t be on a commercial plane... You do not want to get into a tube with a bunch of demons."',
+      quoteAttr: '— Kenneth Copeland · Inside Edition, May 2019',
+      lessons: [
+        { title: 'Tithing as Covenant, Not Contribution', dur: '12 min' },
+        { title: 'Managing Transparency Requests', dur: '10 min' },
+        { title: 'Clergy Residence & Asset Structuring', dur: '11 min' },
+        { title: 'The Vocabulary of Sacred Obligation', dur: '11 min' }
+      ],
+      items: [
+        { title: 'Tithing as Covenant, Not Contribution', text: 'Reframe financial participation as spiritual practice. The most effective donor communication links giving directly to outcomes in the donor\'s own life — not to your budget.' },
+        { title: 'Managing Transparency Requests', text: 'Communication strategies for redirecting financial inquiries toward mission impact before they reach leadership. Most financial questions are not really about money.' },
+        { title: 'Clergy Residence & Asset Structuring', text: 'How high-performing ministry leaders structure personal assets — including residences, vehicles, and security — as ministry infrastructure.' }
+      ]
+    },
+    4: {
+      tag: 'Module IV · 4 Lessons · 39 min',
+      num: 'Platform & Production',
+      title: 'Your Platform Is Your <em>Highest-ROI</em> Ministry Asset.',
+      tagline: '"Production investment is not a cost center. It is a revenue multiplier and a tax instrument simultaneously."',
+      caseLabel: 'The Model in Practice',
+      caseSubject: 'Steven Furtick &amp; <em>Elevation Church</em>',
+      stats: [
+        { num: '$108M', label: 'Annual tithes and offerings, 2023' },
+        { num: '93M', label: 'Video sermon streams across platforms, 2023' },
+        { num: '2B+', label: 'All-time streams of Elevation Worship music' }
+      ],
+      caseBody: '<p>In 2014, WCNC documented a "Spontaneous Baptism How-To Guide" distributed by Elevation Church staff — detailing how selected volunteers were pre-positioned as "first responders" to create the appearance of organic spiritual response during services. Furtick\'s public response: "I\'m Too Scared of God to Manipulate Baptisms." The guide was not disputed.</p><p>Elevation Worship — co-founded by Furtick in 2007 — generates streaming royalties and publishing income through the ministry\'s affiliated structures. Grammy-winning (with Maverick City Music). 2+ billion all-time streams. Furtick\'s 19-acre land was purchased for $325,000; the house built on it is now tax-assessed at $1.7 million. No clergy residence challenge has been filed.</p>',
+      quote: '"The camera pays for itself. The question is never whether to invest in production — it\'s whether you\'re willing to operate at the scale the mission requires."',
+      quoteAttr: '— Elevation Church internal communications · reported by WFAE Charlotte',
+      lessons: [
+        { title: 'Production as Ministry Infrastructure', dur: '10 min' },
+        { title: 'Music & IP Revenue Structures', dur: '11 min' },
+        { title: 'The Authenticity Framework', dur: '9 min' },
+        { title: 'Broadcast Expansion Strategy', dur: '9 min' }
+      ],
+      items: [
+        { title: 'Production as Ministry Infrastructure', text: 'All broadcast, streaming, and stage production expenses are fully deductible as ministry operating costs. No IRS spending ratio exists. The question is whether the expenditure is mission-aligned — and you define the mission.' },
+        { title: 'Music & IP Revenue Structures', text: 'Worship music produced under the ministry umbrella generates streaming royalties and publishing income that flows back through affiliated entities while amplifying the theological brand.' },
+        { title: 'The Authenticity Framework', text: 'How to design spontaneous, organic-feeling moments within highly produced environments. The most effective services feel unrehearsed. They are not.' }
+      ]
+    },
+    5: {
+      tag: 'Module V · 5 Lessons · 58 min',
+      num: 'Board Governance',
+      title: 'A Well-Structured Board <em>Amplifies</em> Leadership.',
+      tagline: '"The question is not whether your board has oversight. It\'s whether they have the right kind."',
+      caseLabel: 'The Model in Practice',
+      caseSubject: 'Second Baptist Houston &amp; <em>The Young Governance Model</em>',
+      stats: [
+        { num: '~100', label: 'Years member voting rights had been in place before their removal' },
+        { num: '0', label: 'Votes members are now entitled to cast — per the amended bylaws' },
+        { num: '2025', label: 'Year members filed lawsuit alleging "nearly dictatorial authority"' }
+      ],
+      caseBody: '<p>On May 31, 2023, Second Baptist Church in Houston removed member voting rights that had been in place for 95 years. The meeting was publicly framed as addressing "the woke agenda." What was not disclosed: the changes were engineered to let Senior Pastor <strong>Ed Young Sr.</strong> appoint his son <strong>Ben Young</strong> as his successor without a congregational vote. Young Sr. stepped down in May 2024 and installed Ben Young directly. No vote held.</p><p>The governance model mirrors Fellowship Church in Grapevine, TX — led by <strong>Ed Young Jr.</strong> (a separate ministry, also in the Young family). Fellowship eliminated member voting in 2001. Attorney Dennis Brewer Jr. is believed to have drafted both sets of bylaws. Ed Young Jr.\'s 2010 reported Fellowship Church compensation: $1M salary + $240K housing allowance. Current residence appraised at $6.2M. Trial set April 29, 2026.</p>',
+      quote: '"Members are not entitled to vote in person, by proxy or otherwise."',
+      quoteAttr: '— Second Baptist Houston bylaws, amended May 31, 2023',
+      lessons: [
+        { title: 'Removing Member Voting Rights', dur: '12 min' },
+        { title: 'Board Composition Strategy', dur: '11 min' },
+        { title: 'Managing Board Member Exits', dur: '12 min' },
+        { title: 'Bylaw Amendment Sequencing', dur: '13 min' },
+        { title: 'Succession Without a Vote', dur: '10 min' }
+      ],
+      items: [
+        { title: 'Removing Member Voting Rights', text: 'Member voting rights are not required by law. This module covers the legal sequence, communication strategy, and timing for bylaw amendment — including how to frame an unrelated agenda item.' },
+        { title: 'Board Composition Strategy', text: 'How senior pastors retain appointment authority over the board that nominally oversees them — and what that structure looks like at the nation\'s largest ministries.' },
+        { title: 'Managing Board Member Exits', text: 'When alignment breaks down — the relationship conversation, formal process, and narrative management. Done correctly, these transitions are invisible.' }
+      ]
+    }
+  };
+
+  // ── SCRIPTURE TRANSLATIONS ──
+  const TRANS_BLURBS = {
+    ESV:  'Formal equivalence — word for word. The preferred translation of Reformed seminaries and evangelical institutions. Published by Crossway, a ministry of Good News Publishers.',
+    NLT:  'Thought for thought — meaning over literalism, optimized for modern comprehension. The best-selling Bible translation in the United States for the past decade.',
+    CJB:  'Translated by David Stern to restore the Jewish context stripped from standard translations. Uses Hebrew names throughout. Challenges the Gentile-default reading of the New Testament.',
+    NKJV: 'Updates the King James Version\'s archaic language while preserving its formal structure. Bridges traditional congregations and contemporary readers without breaking with either.',
+    GRK:  'The original language of the New Testament. Koine — "common" — was the everyday commercial language of the Roman Empire. Not sacred, not literary. The language of merchants, tax collectors, and soldiers.'
+  };
+
+  const TRANSLATIONS = {
+    ESV: [
+      { verse: '"Beware of false prophets, who come to you in sheep\'s clothing but inwardly are ravenous wolves."', ref: 'Matthew 7:15 · ESV' },
+      { verse: '"And Jesus entered the temple and drove out all who sold and bought in the temple, and he overturned the tables of the money-changers and the seats of those who sold pigeons. He said to them, \'It is written, "My house shall be called a house of prayer," but you make it a den of robbers.\'"', ref: 'Matthew 21:12–13 · ESV' },
+      { verse: '"No servant can serve two masters, for either he will hate the one and love the other, or he will be devoted to the one and despise the other. You cannot serve God and money."', ref: 'Luke 16:13 · ESV' }
+    ],
+    NLT: [
+      { verse: '"Beware of false prophets who come disguised as harmless sheep but are really vicious wolves."', ref: 'Matthew 7:15 · NLT' },
+      { verse: '"Jesus entered the Temple and began to drive out all the people buying and selling animals for sacrifice. He knocked over the tables of the money changers and the chairs of those selling doves. He said to them, \'The Scriptures declare, "My Temple will be called a house of prayer," but you have turned it into a den of thieves!\'"', ref: 'Matthew 21:12–13 · NLT' },
+      { verse: '"No one can serve two masters. For you will hate one and love the other; you will be devoted to one and despise the other. You cannot serve both God and money."', ref: 'Luke 16:13 · NLT' }
+    ],
+    CJB: [
+      { verse: '"Beware of the false prophets! They come to you wearing sheep\'s clothing, but underneath they are hungry wolves!"', ref: 'Matthew 7:15 · CJB' },
+      { verse: '"Yeshua entered the Temple area and drove out those who were doing business there, both the merchants and their customers. He upset the tables of the money-changers and the seats of those selling doves, and said to them, \'It has been written, "My house will be called a house of prayer," but you are making it a den of robbers!\'"', ref: 'Matthew 21:12–13 · CJB' },
+      { verse: '"No servant can be slave to two masters, for he will either hate the first and love the second, or scorn the second and be loyal to the first. You can\'t be a slave to both God and money."', ref: 'Luke 16:13 · CJB' }
+    ],
+    NKJV: [
+      { verse: '"Beware of false prophets, who come to you in sheep\'s clothing, but inwardly they are ravenous wolves."', ref: 'Matthew 7:15 · NKJV' },
+      { verse: '"Then Jesus went into the temple of God and drove out all those who bought and sold in the temple, and overturned the tables of the money changers and the seats of those who sold doves. And He said to them, \'It is written, "My house shall be called a house of prayer," but you have made it a "den of thieves."\'"', ref: 'Matthew 21:12–13 · NKJV' },
+      { verse: '"No servant can serve two masters; for either he will hate the one and love the other, or else he will be loyal to the one and despise the other. You cannot serve God and mammon."', ref: 'Luke 16:13 · NKJV' }
+    ],
+    GRK: [
+      { verse: 'Προσέχετε ἀπὸ τῶν ψευδοπροφητῶν, οἵτινες ἔρχονται πρὸς ὑμᾶς ἐν ἐνδύμασιν προβάτων, ἔσωθεν δέ εἰσιν λύκοι ἅρπαγες.', ref: 'Ματθαῖος 7:15 · Κοινὴ Ἑλληνική' },
+      { verse: 'Καὶ εἰσῆλθεν Ἰησοῦς εἰς τὸ ἱερὸν καὶ ἐξέβαλεν πάντας τοὺς πωλοῦντας καὶ ἀγοράζοντας ἐν τῷ ἱερῷ, καὶ τὰς τραπέζας τῶν κολλυβιστῶν κατέστρεψεν καὶ τὰς καθέδρας τῶν πωλούντων τὰς περιστεράς... καὶ λέγει αὐτοῖς· γέγραπται, ὁ οἶκός μου οἶκος προσευχῆς κληθήσεται, ὑμεῖς δὲ αὐτὸν ποιεῖτε σπήλαιον λῃστῶν.', ref: 'Ματθαῖος 21:12–13 · Κοινὴ Ἑλληνική' },
+      { verse: 'Οὐδεὶς οἰκέτης δύναται δυσὶ κυρίοις δουλεύειν· ἢ γὰρ τὸν ἕνα μισήσει καὶ τὸν ἕτερον ἀγαπήσει, ἢ ἑνὸς ἀνθέξεται καὶ τοῦ ἑτέρου καταφρονήσει. οὐ δύνασθε θεῷ δουλεύειν καὶ μαμωνᾷ.', ref: 'Λουκᾶς 16:13 · Κοινὴ Ἑλληνική' }
+    ]
+  };
+
+  let currentTranslation = 'ESV';
+
+  function setTranslation(key) {
+    currentTranslation = key;
+    const verses = TRANSLATIONS[key];
+    const isGreek = key === 'GRK';
+    verses.forEach((v, i) => {
+      const vEl = document.getElementById('rv-' + i);
+      const rEl = document.getElementById('rr-' + i);
+      if (vEl) {
+        vEl.textContent = v.verse;
+        vEl.className = 'rp-verse' + (isGreek ? ' greek' : '');
+      }
+      if (rEl) rEl.textContent = v.ref;
+    });
+    // Update blurb
+    const blurb = document.getElementById('trans-blurb');
+    if (blurb) blurb.textContent = TRANS_BLURBS[key] || '';
+    // Update toggle buttons
+    document.querySelectorAll('.trans-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.textContent.trim() === key || (key === 'GRK' && btn.textContent.trim() === 'Κοινή'));
+    });
+  }
+
+  function showModuleModal(num) {
+    const d = MODULE_PREVIEWS[num];
+    if (!d) return;
+    const s = document.getElementById('screen-preview');
+    s.querySelector('.preview-eyebrow').innerHTML = d.tag;
+    s.querySelector('h1').innerHTML = d.title;
+    s.querySelector('.preview-tagline').textContent = d.tagline;
+    s.querySelector('.preview-case-label').textContent = d.caseLabel;
+    s.querySelector('.preview-case-subject').innerHTML = d.caseSubject;
+    s.querySelector('.preview-stats').innerHTML = d.stats.map(st =>
+      `<div class="preview-stat"><div class="preview-stat-num">${st.num}</div><div class="preview-stat-label">${st.label}</div></div>`
+    ).join('');
+    s.querySelector('.preview-case-body').innerHTML = d.caseBody;
+    s.querySelector('.preview-quote').textContent = d.quote;
+    s.querySelector('.preview-quote-attr').textContent = d.quoteAttr;
+    s.querySelector('.preview-covered-grid').innerHTML = d.items.map(item =>
+      `<div class="preview-covered-item"><div class="preview-covered-dot"></div><div><div class="preview-covered-title">${item.title}</div><div class="preview-covered-text">${item.text}</div></div></div>`
+    ).join('');
+    const lockSvg = `<svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`;
+    s.querySelector('#preview-lessons').innerHTML = (d.lessons || []).map((l, i) =>
+      `<div class="lesson-card">
+        <div class="lesson-thumb">
+          <span class="lesson-num">0${i + 1}</span>
+          <div class="lesson-lock">${lockSvg}</div>
+        </div>
+        <div class="lesson-title">${l.title}</div>
+        <div class="lesson-dur">${l.dur}</div>
+      </div>`
+    ).join('');
+    navigate('preview');
+  }
+
+</script>
+
+<!-- ═══════════════════════════════════════════════════
+     SCREEN · REVEAL
+═══════════════════════════════════════════════════ -->
+<div class="reveal-glitch-overlay" id="reveal-glitch"></div>
+<div id="screen-reveal" class="screen reveal-screen">
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-logo" onclick="navigate('landing')">The <em>Prosperity</em> Playbook</div>
+    </div>
+  </nav>
+
+  <!-- ── BEAT 1: THE MIRROR — what you built, reframed ── -->
+  <div class="reveal-mirror">
+    <div class="mirror-label">Your Ministry &nbsp;·&nbsp; As Configured</div>
+    <div class="mirror-title" id="mirror-headline">You just built this.</div>
+
+    <div class="mirror-grid">
+      <div class="mirror-cell">
+        <div class="mirror-cell-value gold" id="mirror-total">—</div>
+        <div class="mirror-cell-label">Total Annual<br>Compensation</div>
+      </div>
+      <div class="mirror-cell">
+        <div class="mirror-cell-value" id="mirror-disclosed">—</div>
+        <div class="mirror-cell-label">Publicly<br>Disclosed</div>
+      </div>
+      <div class="mirror-cell">
+        <div class="mirror-cell-value" id="mirror-org">—</div>
+        <div class="mirror-cell-label">Organization<br>Type</div>
+      </div>
+    </div>
+
+    <div class="mirror-bylaws" id="mirror-bylaws">
+      <div class="mirror-bylaw-line" id="mirror-bylaw-0"></div>
+      <div class="mirror-bylaw-line" id="mirror-bylaw-1"></div>
+      <div class="mirror-bylaw-line" id="mirror-bylaw-2"></div>
+    </div>
+
+    <div class="mirror-score-block">
+      <div class="mirror-score-label">Leadership Protection Score</div>
+      <div class="mirror-score-num" id="mirror-score">—</div>
+      <div class="mirror-score-sub">of 100</div>
+    </div>
+
+    <div class="mirror-footnote">Every feature you selected is legal. Every feature is currently in use.</div>
+  </div>
+
+  <!-- ── BEAT 2: THE WOLF — they described themselves ── -->
+  <div class="reveal-hero">
+    <div class="reveal-hero-content">
+      <div class="reveal-exhibit">Exhibit A &nbsp;·&nbsp; Three Primary Sources</div>
+      <h2 class="reveal-headline">They described<br>themselves.</h2>
+      <p class="reveal-sub">The IRS code is silent on the subject.<br>The following three passages are not.</p>
+    </div>
+    <div class="reveal-wolf-panel">
+      <img src="wolf.png" alt="">
+    </div>
+    <div class="reveal-scroll-cue">Scroll</div>
+  </div>
+
+  <!-- PASSAGES -->
+  <div class="reveal-passages">
+    <div class="reveal-passage">
+      <div class="rp-num">01</div>
+      <div>
+        <div class="rp-ref" id="rr-0"></div>
+        <div class="rp-verse" id="rv-0"></div>
+      </div>
+    </div>
+    <div class="reveal-passage">
+      <div class="rp-num">02</div>
+      <div>
+        <div class="rp-ref" id="rr-1"></div>
+        <div class="rp-verse" id="rv-1"></div>
+      </div>
+    </div>
+    <div class="reveal-passage">
+      <div class="rp-num">03</div>
+      <div>
+        <div class="rp-ref" id="rr-2"></div>
+        <div class="rp-verse" id="rv-2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRANSLATION TOGGLE -->
+  <div class="reveal-trans-section">
+    <div class="trans-toggle">
+      <button class="trans-btn active" onclick="setTranslation('ESV')">ESV</button>
+      <button class="trans-btn" onclick="setTranslation('NLT')">NLT</button>
+      <button class="trans-btn" onclick="setTranslation('CJB')">CJB</button>
+      <button class="trans-btn" onclick="setTranslation('NKJV')">NKJV</button>
+      <button class="trans-btn" onclick="setTranslation('GRK')">Κοινή</button>
+    </div>
+    <div class="trans-blurb" id="trans-blurb"></div>
+  </div>
+
+  <!-- ── BEAT 3: THE STATEMENT — their data, recontextualized ── -->
+  <div class="reveal-statement">
+    <div class="reveal-stmt-rule"></div>
+    <div class="reveal-stmt-big">The strategies in this course are real. <strong>They are legal.</strong> They are currently in use by the most financially optimized ministries in the country.</div>
+    <div class="reveal-stmt-small">Based on your responses — <strong>you are positioned to use them.</strong></div>
+  </div>
+
+  <!-- CTA — the system keeps selling -->
+  <div class="reveal-cta">
+    <button class="btn-primary" onclick="navigate('results')">Continue to Your Dashboard →</button>
+    <div class="reveal-cta-note">Full curriculum access. Private cohort placement. No Form 990 disclosure required.</div>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SCREEN · PAYMENT / ENROLLMENT
+═══════════════════════════════════════════════════ -->
+<div id="screen-payment" class="screen payment-screen">
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-logo" onclick="navigate('landing')">The <em>Prosperity</em> Playbook</div>
+      <div class="nav-links">
+        <button class="btn-ghost" onclick="navigate('landing')" style="padding:8px 18px;font-size:10px;">← Back to Overview</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="payment-container">
+    <div class="payment-breadcrumb">2026 Cohort · Program Enrollment</div>
+    <div class="payment-header">
+      <h2>Secure Your <em>Position</em></h2>
+      <p>2026 cohort placement is limited. Your enrollment locks in your seat and provides immediate access to the full five-module curriculum.</p>
+    </div>
+
+    <div class="enrollment-pricing">
+      <div class="ep-label">2026 Cohort · Program Investment</div>
+      <div class="ep-row">
+        <div class="ep-main">
+          <div class="ep-amount">$24,997</div>
+          <div class="ep-desc">One-time enrollment. Full curriculum access. Private cohort placement.</div>
+        </div>
+        <div class="ep-divider">or</div>
+        <div class="ep-alt">
+          <div class="ep-alt-title">Ministry Growth Plan</div>
+          <div class="ep-alt-formula">4 quarterly installments<span class="ep-alt-min">of $6,997 each · $27,988 total</span></div>
+          <div class="ep-alt-note">Structured as a ministry operating expense.</div>
+        </div>
+      </div>
+      <div class="ep-fine">Enrollment contribution is classified as a ministry operating expense and is fully deductible under your organization's existing tax-exempt status. No Form 990 disclosure required.</div>
+    </div>
+
+    <div class="payment-form-card">
+      <div class="payment-form-title">Enrollment Information</div>
+      <div class="form-row-2">
+        <div class="form-field-pay">
+          <label>Your Name</label>
+          <input type="text" placeholder="Rev. First Last">
+        </div>
+        <div class="form-field-pay">
+          <label>Ministry Name</label>
+          <input type="text" placeholder="Church or Organization">
+        </div>
+      </div>
+      <div class="form-row-2">
+        <div class="form-field-pay">
+          <label>Email Address</label>
+          <input type="email" placeholder="you@yourministry.org">
+        </div>
+        <div class="form-field-pay">
+          <label>Your Role</label>
+          <input type="text" placeholder="Senior Pastor / Executive Director">
+        </div>
+      </div>
+
+      <hr class="payment-divider">
+      <div class="payment-section-label">Payment</div>
+
+      <div class="card-field-full form-field-pay">
+        <label>Card Number</label>
+        <input type="text" placeholder="•••• •••• •••• ••••">
+      </div>
+      <div class="form-row-2">
+        <div class="form-field-pay">
+          <label>Expiry</label>
+          <input type="text" placeholder="MM / YY">
+        </div>
+        <div class="form-field-pay">
+          <label>Security Code</label>
+          <input type="text" placeholder="•••">
+        </div>
+      </div>
+
+      <button class="btn-enroll" onclick="navigate('results')">Complete Enrollment →</button>
+      <div class="payment-fine">By enrolling, you confirm that you are a senior pastor, executive minister, or equivalent ministry leadership role. Your contribution is structured as a ministry operating expense. All enrollment materials are delivered digitally. No refunds after curriculum access is granted.</div>
+      <div class="payment-alt-link">Not ready to enroll? <a href="#" onclick="event.preventDefault(); navigate('survey')">Build your Ministry Profile first →</a></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODULE PREVIEW SCREEN -->
+<div id="screen-preview" class="screen preview-screen">
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-logo" onclick="navigate('landing')">The <em>Prosperity</em> Playbook</div>
+      <div class="nav-links">
+        <a href="#" onclick="event.preventDefault(); showModuleModal(1)">Legal Foundation</a>
+        <a href="#" onclick="event.preventDefault(); showModuleModal(2)">Compensation</a>
+        <a href="#" onclick="event.preventDefault(); showModuleModal(3)">Donor Culture</a>
+        <a href="#" onclick="event.preventDefault(); showModuleModal(4)">Platform</a>
+        <a href="#" onclick="event.preventDefault(); showModuleModal(5)">Governance</a>
+        <button class="btn-nav" onclick="navigate('payment')">Join 2026 Cohort</button>
+      </div>
+    </div>
+  </nav>
+  <div class="preview-hero">
+    <div class="preview-hero-inner">
+      <div class="preview-eyebrow"></div>
+      <h1></h1>
+      <p class="preview-tagline"></p>
+    </div>
+  </div>
+  <div class="preview-body">
+    <div class="preview-case">
+      <div class="preview-case-label"></div>
+      <div class="preview-case-subject"></div>
+      <div class="preview-stats"></div>
+      <div class="preview-case-body"></div>
+      <div class="preview-quote"></div>
+      <div class="preview-quote-attr"></div>
+    </div>
+    <div class="lesson-row-label">Lessons in This Module</div>
+    <div class="lesson-row" id="preview-lessons"></div>
+    <hr class="preview-divider">
+    <div class="preview-covered-label">What's Covered in This Module</div>
+    <div class="preview-covered-grid"></div>
+    <div class="preview-cta-row">
+      <button class="btn-primary" onclick="navigate('payment')">Join 2026 Cohort →</button>
+      <div class="preview-cta-note">Open to all ministry sizes. No minimum revenue requirement.<br>Assessment takes approx. 4 minutes.</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
