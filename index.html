@@ -322,6 +322,50 @@
     .module-cta-inner { max-width: 520px; margin: 0 auto; }
     .module-cta-section p { font-size: 14px; color: var(--muted-l); margin-bottom: 28px; }
 
+    /* ── SCORE BREAKDOWN (post-configurator) ── */
+    .score-screen { background: var(--bg); min-height: 100vh; }
+    .score-container { max-width: 740px; margin: 0 auto; padding: 72px 48px 80px; }
+    .score-badge { display: inline-block; background: rgba(196,163,90,.1); border: 1.5px solid rgba(196,163,90,.3); border-radius: var(--r-pill); padding: 7px 18px; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); margin-bottom: 24px; font-weight: 600; }
+    .score-screen h2 { font-family: 'Inter', sans-serif; font-size: 44px; font-weight: 800; color: var(--white); margin-bottom: 12px; line-height: 1.0; text-transform: uppercase; letter-spacing: -.025em; }
+    .score-screen h2 em { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; font-size: 1.05em; text-transform: none; color: var(--gold); }
+    .score-screen .score-sub { font-size: 14px; color: var(--muted); line-height: 1.8; max-width: 520px; margin-bottom: 48px; }
+
+    .score-total-block { text-align: center; padding: 48px 0 40px; border-bottom: 1px solid rgba(255,255,255,.06); margin-bottom: 40px; }
+    .score-total-num { font-family: 'Inter', sans-serif; font-size: 88px; font-weight: 800; color: var(--gold); letter-spacing: -.04em; line-height: 1; }
+    .score-total-label { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-top: 10px; }
+    .score-total-tier { font-size: 13px; color: var(--on-dark); margin-top: 12px; font-weight: 500; letter-spacing: .04em; }
+
+    .score-components { display: flex; flex-direction: column; gap: 16px; margin-bottom: 48px; }
+    .score-comp-row { background: var(--bg2); border-radius: 14px; border: 1px solid rgba(255,255,255,.05); padding: 22px 28px; }
+    .score-comp-top { display: flex; align-items: center; gap: 20px; }
+    .score-comp-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(196,163,90,.08); border: 1px solid rgba(196,163,90,.15); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .score-comp-body { flex: 1; }
+    .score-comp-name { font-size: 14px; font-weight: 600; color: var(--on-dark); margin-bottom: 3px; }
+    .score-comp-detail { font-size: 11px; color: var(--muted); line-height: 1.6; }
+    .score-comp-pts { font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 700; color: var(--gold); flex-shrink: 0; letter-spacing: -.02em; }
+    .score-comp-max { font-size: 10px; color: var(--muted); font-weight: 400; }
+
+    .score-bar-track { height: 4px; background: rgba(255,255,255,.06); border-radius: 4px; margin-top: 14px; overflow: hidden; }
+    .score-bar-fill { height: 100%; background: var(--gold); border-radius: 4px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); }
+
+    .score-improve { background: var(--bg2); border-radius: var(--r-card); border: 1px solid rgba(196,163,90,.12); padding: 32px; margin-bottom: 40px; }
+    .score-improve-label { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; font-weight: 600; }
+    .score-improve-text { font-size: 14px; color: var(--on-dark); line-height: 1.8; margin-bottom: 4px; }
+    .score-improve-text strong { color: var(--gold); }
+    .score-improve-sub { font-size: 12px; color: var(--muted); line-height: 1.7; margin-top: 8px; }
+
+    .score-cta-block { text-align: center; padding-top: 16px; }
+    .score-cta-note { font-size: 11px; color: var(--muted); margin-top: 14px; }
+
+    @media (max-width: 768px) {
+      .score-container { padding: 48px 20px 56px; }
+      .score-screen h2 { font-size: 30px; }
+      .score-total-num { font-size: 60px; }
+      .score-comp-row { padding: 18px 20px; }
+      .score-comp-top { gap: 14px; }
+      .score-comp-pts { font-size: 20px; }
+    }
+
     /* ── COMPLETE ── */
     .complete-screen { background: var(--bg); min-height: 100vh; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 48px; }
     .complete-screen .c-label { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin-bottom: 28px; font-weight: 600; }
@@ -466,10 +510,7 @@
     .btn-config-next:hover { background: var(--gold2); transform: translateY(-1px); }
     .btn-config-next.disabled { opacity: .3; pointer-events: none; }
 
-    @media (max-width: 768px) {
-      .config-layout { grid-template-columns: 1fr; gap: 32px; padding: 32px 24px 64px; }
-      .config-sidebar { position: static; order: -1; }
-    }
+    /* configurator mobile — merged into main block below */
 
     /* ── REVEAL MIRROR ── */
     .reveal-mirror { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 80px 56px; text-align: center; position: relative; }
@@ -652,21 +693,151 @@
     .payment-alt-link a:hover { border-bottom-color: var(--gold); }
 
     @media (max-width: 768px) {
-      .hero { grid-template-columns: 1fr; grid-template-rows: auto auto auto; padding-top: 80px; }
-      .hero-video-panel { grid-column: 1; grid-row: 1; height: 50vw; }
-      .hero-inner { grid-column: 1; grid-row: 2; padding: 32px 24px 24px; }
-      .hero-stats-row { grid-column: 1; grid-row: 3; padding: 0 24px 48px; }
-      .hero h1 { font-size: 52px; }
-      .stats { grid-template-columns: repeat(2,1fr); }
-      .intro, .modules-section, .testimonials, .cta-section { padding-left: 24px; padding-right: 24px; }
-      .intro-inner { grid-template-columns: 1fr; gap: 40px; }
-      .module-grid { grid-template-columns: 1fr; }
-      .testi-grid { grid-template-columns: 1fr; }
-      .profile-grid { grid-template-columns: 1fr; }
-      nav { padding: 0 24px; }
+      /* ── Global / Nav ── */
+      nav { padding: 0 16px; }
+      .nav-inner { height: 56px; }
       .nav-links a { display: none; }
-      .survey-container, .module-body, .module-hero { padding: 48px 24px; }
-      .results-screen, .traits-screen { padding: 48px 24px; }
+      .nav-logo { font-size: 11px; }
+      .btn-nav { font-size: 11px; padding: 7px 16px; }
+      .bar { font-size: 9px; padding: 6px 16px; }
+
+      /* ── Landing Hero ── */
+      .hero { grid-template-columns: 1fr; grid-template-rows: auto auto auto; padding-top: 56px; min-height: auto; }
+      .hero-video-panel { grid-column: 1; grid-row: 1; height: 45vw; }
+      .hero-inner { grid-column: 1; grid-row: 2; padding: 28px 20px 20px; }
+      .hero-stats-row { grid-column: 1; grid-row: 3; padding: 0 20px 36px; }
+      .hero h1 { font-size: 44px; margin-bottom: 16px; }
+      .hero-label { font-size: 10px; margin-bottom: 16px; }
+      .hero-ctas { flex-direction: column; gap: 10px; }
+      .btn-primary, .btn-ghost { width: 100%; text-align: center; padding: 14px 24px; font-size: 13px; }
+      .stats { grid-template-columns: repeat(2,1fr); gap: 0; }
+      .stat-val { font-size: 26px; }
+      .stat-label { font-size: 10px; }
+
+      /* ── Intro ── */
+      .intro, .modules-section, .testimonials, .cta-section { padding-left: 20px; padding-right: 20px; }
+      .intro { padding-top: 56px; padding-bottom: 56px; }
+      .intro-inner { grid-template-columns: 1fr; gap: 32px; }
+      .intro h2 { font-size: 28px; }
+      .section-label { font-size: 9px; }
+
+      /* ── Modules ── */
+      .modules-section h2 { font-size: 28px; }
+      .module-grid { grid-template-columns: 1fr; }
+
+      /* ── Testimonials ── */
+      .testimonials h2 { font-size: 28px; }
+      .testi-grid { grid-template-columns: 1fr; }
+
+      /* ── CTA ── */
+      .cta-section h2 { font-size: 32px; }
+      .enrollment-pricing { padding: 24px 20px; }
+      .ep-row { grid-template-columns: 1fr; gap: 16px; }
+      .ep-amount { font-size: 40px; }
+      .ep-divider { text-align: center; padding: 4px 0; }
+
+      /* ── Footer ── */
+      footer { padding: 36px 20px 24px; }
+      .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+
+      /* ── Configurator ── */
+      .config-layout { grid-template-columns: 1fr; gap: 28px; padding: 28px 20px 56px; }
+      .config-sidebar { position: static; order: -1; }
+      .config-main h2 { font-size: 26px; }
+      .config-step-label { font-size: 9px; }
+      .config-desc { font-size: 12px; }
+      .org-card { padding: 20px; }
+      .org-card-title { font-size: 14px; }
+      .org-card-desc { font-size: 11px; }
+      .org-card-features { gap: 4px; }
+      .org-feature { font-size: 9px; padding: 4px 8px; }
+      .comp-slider-row { margin-bottom: 20px; }
+      .comp-summary { padding: 20px; }
+      .comp-summary-value.total { font-size: 20px; }
+      .gov-option { padding: 14px 16px; }
+      .gov-bylaw-preview { padding: 16px 18px; }
+      .gov-bylaw-text { font-size: 13px; }
+      .donor-card { padding: 20px; }
+      .donor-card-sample { font-size: 14px; padding: 10px 14px; }
+      .config-nav { flex-direction: column; gap: 12px; }
+      .btn-config-next, .btn-config-back { width: 100%; text-align: center; }
+      .profile-card { padding: 20px; }
+      .profile-card-metric-value { font-size: 36px; }
+
+      /* ── Reveal Mirror ── */
+      .reveal-mirror { padding: 60px 20px; min-height: auto; }
+      .mirror-title { font-size: 28px; margin-bottom: 36px; }
+      .mirror-grid { grid-template-columns: 1fr; gap: 1px; }
+      .mirror-cell { padding: 20px 16px; }
+      .mirror-cell-value { font-size: 22px; }
+      .mirror-bylaws { margin-bottom: 32px; }
+      .mirror-bylaw-line { font-size: 14px; }
+      .mirror-score-num { font-size: 52px; }
+
+      /* ── Reveal Hero / Wolf ── */
+      .reveal-hero { grid-template-columns: 1fr; height: auto; min-height: 80vh; }
+      .reveal-hero-content { padding: 40px 20px 60px; justify-content: flex-end; }
+      .reveal-headline { font-size: 48px; }
+      .reveal-sub { font-size: 12px; }
+      .reveal-wolf-panel { position: absolute; inset: 0; z-index: 0; }
+      .reveal-wolf-panel img { height: 70%; opacity: .35; right: -20%; }
+      .reveal-hero-content { position: relative; z-index: 2; }
+      .reveal-scroll-cue { left: 20px; }
+
+      /* ── Reveal Passages ── */
+      .reveal-passage { padding: 40px 20px; grid-template-columns: 48px 1fr; gap: 0 20px; }
+      .rp-num { font-size: 42px; }
+      .rp-verse { font-size: 18px; }
+      .reveal-trans-section { padding: 32px 20px 40px; padding-left: 20px; }
+      .trans-toggle { gap: 4px; }
+      .trans-btn { font-size: 9px; padding: 6px 12px; }
+
+      /* ── Reveal Statement ── */
+      .reveal-statement { padding: 56px 20px 36px; }
+      .reveal-stmt-big { font-size: 22px; }
+      .reveal-stmt-small { font-size: 12px; }
+      .reveal-cta { padding: 32px 20px 64px; }
+
+      /* ── Results / Dashboard ── */
+      .results-screen, .traits-screen { padding: 36px 20px; }
+      .results-screen h2 { font-size: 32px; }
+      .profile-grid { grid-template-columns: 1fr; }
+      .results-badge { font-size: 9px; }
+      .ps-score { font-size: 24px; }
+
+      /* ── Module Screens ── */
+      .module-hero { padding: 48px 20px; }
+      .module-body { padding: 40px 20px; }
+      .module-screen h1 { font-size: 36px; }
+      .module-cta-section { padding: 40px 20px; }
+      .case-study { padding: 24px 20px; }
+      .cs-subject { font-size: 18px; }
+      .cs-stats { grid-template-columns: 1fr; }
+      .cs-stat-num { font-size: 28px; }
+
+      /* ── Traits Screen ── */
+      .traits-screen h2 { font-size: 30px; }
+      .traits-card { padding: 24px 20px; }
+
+      /* ── Complete Screen ── */
+      .complete-screen h1 { font-size: 44px; }
+      .complete-screen { padding: 56px 20px; }
+      .complete-line { font-size: 16px; padding: 20px 24px; }
+
+      /* ── Payment Screen ── */
+      .payment-container { padding: 48px 20px 56px; }
+      .payment-header h2 { font-size: 30px; }
+      .payment-form-card { padding: 24px 20px; }
+      .form-row-2 { grid-template-columns: 1fr; gap: 12px; }
+
+      /* ── Preview Screen ── */
+      .preview-hero { padding: 48px 20px 36px; padding-top: calc(56px + 36px); }
+      .preview-screen h1 { font-size: 30px; }
+      .preview-body { padding: 36px 20px 56px; }
+      .preview-case { padding: 24px 20px; }
+      .preview-stats { grid-template-columns: 1fr; }
+      .preview-stat-num { font-size: 30px; }
+      .preview-case-subject { font-size: 20px; }
     }
   </style>
 </head>
@@ -1215,6 +1386,118 @@
           <div class="profile-card-metric-sub">of 100</div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SCREEN · SCORE BREAKDOWN (post-configurator)
+═══════════════════════════════════════════════════ -->
+<div id="screen-score" class="screen score-screen">
+  <div class="bar">
+    <span>Ministry Financial Strategy</span>
+    <span class="dot">·</span>
+    <span>2026 Edition</span>
+    <span class="dot">·</span>
+    <span>Profile Complete</span>
+  </div>
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-logo" onclick="navigate('landing')">The <em>Prosperity</em> Playbook</div>
+      <div class="nav-links">
+        <button class="btn-ghost" onclick="navigate('landing')" style="padding:8px 18px;font-size:10px;">← Overview</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="score-container">
+    <div class="score-badge">Assessment Complete · 2026 Cohort</div>
+    <h2>Your Ministry<br><em>Protection Profile</em></h2>
+    <p class="score-sub">Based on your ministry configuration, here's how your organization scores across the four pillars of leadership protection.</p>
+
+    <div class="score-total-block">
+      <div class="score-total-num" id="sc-total">0</div>
+      <div class="score-total-label">Leadership Protection Score</div>
+      <div class="score-total-tier" id="sc-tier"></div>
+    </div>
+
+    <div class="score-components">
+      <div class="score-comp-row">
+        <div class="score-comp-top">
+          <div class="score-comp-icon">🏛</div>
+          <div class="score-comp-body">
+            <div class="score-comp-name">Organization Structure</div>
+            <div class="score-comp-detail" id="sc-org-detail">Your legal structure determines your baseline disclosure obligations.</div>
+          </div>
+          <div class="score-comp-pts"><span id="sc-org-pts">0</span> <span class="score-comp-max">/ 30</span></div>
+        </div>
+        <div class="score-bar-track"><div class="score-bar-fill" id="sc-org-bar" style="width:0%"></div></div>
+      </div>
+
+      <div class="score-comp-row">
+        <div class="score-comp-top">
+          <div class="score-comp-icon">💰</div>
+          <div class="score-comp-body">
+            <div class="score-comp-name">Compensation Opacity</div>
+            <div class="score-comp-detail" id="sc-comp-detail">How much of your total compensation is visible to external stakeholders.</div>
+          </div>
+          <div class="score-comp-pts"><span id="sc-comp-pts">0</span> <span class="score-comp-max">/ 25</span></div>
+        </div>
+        <div class="score-bar-track"><div class="score-bar-fill" id="sc-comp-bar" style="width:0%"></div></div>
+      </div>
+
+      <div class="score-comp-row">
+        <div class="score-comp-top">
+          <div class="score-comp-icon">⚖️</div>
+          <div class="score-comp-body">
+            <div class="score-comp-name">Governance Consolidation</div>
+            <div class="score-comp-detail" id="sc-gov-detail">The degree to which leadership authority is centralized and protected from internal challenge.</div>
+          </div>
+          <div class="score-comp-pts"><span id="sc-gov-pts">0</span> <span class="score-comp-max">/ 30</span></div>
+        </div>
+        <div class="score-bar-track"><div class="score-bar-fill" id="sc-gov-bar" style="width:0%"></div></div>
+      </div>
+
+      <div class="score-comp-row">
+        <div class="score-comp-top">
+          <div class="score-comp-icon">🤝</div>
+          <div class="score-comp-body">
+            <div class="score-comp-name">Donor Framework</div>
+            <div class="score-comp-detail" id="sc-donor-detail">How your congregation's relationship with financial transparency is managed.</div>
+          </div>
+          <div class="score-comp-pts"><span id="sc-donor-pts">0</span> <span class="score-comp-max">/ 15</span></div>
+        </div>
+        <div class="score-bar-track"><div class="score-bar-fill" id="sc-donor-bar" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="score-improve" id="sc-improve">
+      <div class="score-improve-label">Room to Grow</div>
+      <div class="score-improve-text" id="sc-improve-text">Your ministry has untapped potential.</div>
+      <div class="score-improve-sub" id="sc-improve-sub">The Prosperity Playbook curriculum covers the legal frameworks, compensation structures, governance models, and communication strategies used by the most financially optimized ministries in the country. Every module is designed to move your score closer to full protection.</div>
+    </div>
+
+    <div class="enrollment-pricing">
+      <div class="ep-label">2026 Cohort · Program Investment</div>
+      <div class="ep-row">
+        <div class="ep-main">
+          <div class="ep-amount">$24,997</div>
+          <div class="ep-desc">One-time enrollment. Full curriculum access. Private cohort placement.</div>
+        </div>
+        <div class="ep-divider">or</div>
+        <div class="ep-alt">
+          <div class="ep-alt-title">Ministry Growth Plan</div>
+          <div class="ep-alt-formula">4 quarterly installments<span class="ep-alt-min">of $6,997 each · $27,988 total</span></div>
+          <div class="ep-alt-note">Structured as a ministry operating expense.</div>
+        </div>
+      </div>
+      <div class="ep-fine">Enrollment contribution is classified as a ministry operating expense and is fully deductible under your organization's existing tax-exempt status. No Form 990 disclosure required.</div>
+    </div>
+
+    <div class="score-cta-block">
+      <button class="btn-primary" onclick="navigate('payment')">Secure Your Position →</button>
+      <div class="score-cta-note">Full curriculum access. Private cohort placement. No Form 990 disclosure required.</div>
     </div>
   </div>
 </div>
@@ -1890,6 +2173,7 @@
       el.classList.add('active');
       window.scrollTo(0, 0);
       state.currentScreen = screen;
+      if (screen === 'score') setTimeout(populateScoreBreakdown, 50);
       if (screen === 'results') setTimeout(updateResultsProfile, 50);
       if (screen === 'reveal') setTimeout(() => { setTranslation(currentTranslation); populateRevealProfile(); }, 50);
     }
@@ -2018,19 +2302,130 @@
     btn.style.opacity = '.6';
     btn.style.pointerEvents = 'none';
 
-    // Glitch transition
-    const overlay = document.getElementById('reveal-glitch');
     setTimeout(() => {
-      overlay.classList.add('flash');
-      setTimeout(() => { overlay.classList.remove('flash'); }, 80);
-      setTimeout(() => { overlay.classList.add('flash2'); }, 180);
-      setTimeout(() => { overlay.classList.remove('flash2'); }, 230);
-      setTimeout(() => { overlay.classList.add('flash'); }, 350);
-      setTimeout(() => {
-        overlay.classList.remove('flash');
-        navigate('reveal');
-      }, 500);
+      navigate('score');
     }, 800);
+  }
+
+  // ── POPULATE SCORE BREAKDOWN SCREEN ──
+  function populateScoreBreakdown() {
+    // Calculate component scores
+    let orgScore = 0;
+    if (state.org === 1) orgScore = 22;
+    if (state.org === 2) orgScore = 30;
+
+    let compScore = 0;
+    const is990Exempt = state.org !== null && state.org >= 1;
+    if (is990Exempt) compScore += 12;
+    if (state.housing) compScore += 4;
+    if (state.vehicle) compScore += 2;
+    if (state.deferred) compScore += 3;
+    if (state.expense) compScore += 2;
+    if (state.fica) compScore += 2;
+
+    let govScore = 0;
+    if (state.gov.appoint !== null) govScore += [0, 5, 10][state.gov.appoint];
+    if (state.gov.access !== null) govScore += [0, 5, 10][state.gov.access];
+    if (state.gov.voting !== null) govScore += [0, 5, 10][state.gov.voting];
+
+    let donorScore = 0;
+    if (state.donor !== null) donorScore = [0, 5, 10, 15][state.donor];
+
+    const total = Math.min(orgScore + compScore + govScore + donorScore, 100);
+
+    // Populate numbers
+    document.getElementById('sc-total').textContent = total;
+    document.getElementById('sc-org-pts').textContent = orgScore;
+    document.getElementById('sc-comp-pts').textContent = compScore;
+    document.getElementById('sc-gov-pts').textContent = govScore;
+    document.getElementById('sc-donor-pts').textContent = donorScore;
+
+    // Animate bars after a short delay
+    setTimeout(() => {
+      document.getElementById('sc-org-bar').style.width = Math.round((orgScore / 30) * 100) + '%';
+      document.getElementById('sc-comp-bar').style.width = Math.round((compScore / 25) * 100) + '%';
+      document.getElementById('sc-gov-bar').style.width = Math.round((govScore / 30) * 100) + '%';
+      document.getElementById('sc-donor-bar').style.width = Math.round((donorScore / 15) * 100) + '%';
+    }, 200);
+
+    // Tier label
+    const tierEl = document.getElementById('sc-tier');
+    if (total >= 80) tierEl.textContent = 'Fully Protected';
+    else if (total >= 60) tierEl.textContent = 'Optimized';
+    else if (total >= 30) tierEl.textContent = 'Established';
+    else tierEl.textContent = 'Emerging';
+
+    // Component detail text
+    const orgDetails = [
+      'Standard nonprofit — full 990 filing and public disclosure required.',
+      'Church classification — 990 filing obligation removed. No public compensation disclosure.',
+      'Association of churches — maximum structural insulation. No 990. No audit without senior Treasury approval.'
+    ];
+    if (state.org !== null) document.getElementById('sc-org-detail').textContent = orgDetails[state.org];
+
+    const compItems = [];
+    if (is990Exempt) compItems.push('990-exempt');
+    if (state.housing) compItems.push('housing allowance');
+    if (state.vehicle) compItems.push('vehicle');
+    if (state.deferred) compItems.push('deferred comp');
+    if (state.expense) compItems.push('discretionary expense');
+    if (state.fica) compItems.push('FICA opt-out');
+    if (compItems.length > 0) {
+      document.getElementById('sc-comp-detail').textContent = 'Active instruments: ' + compItems.join(', ') + '.';
+    } else {
+      document.getElementById('sc-comp-detail').textContent = 'No compensation privacy instruments currently active.';
+    }
+
+    const govItems = [];
+    if (state.gov.appoint === 2) govItems.push('pastor appoints board');
+    else if (state.gov.appoint === 1) govItems.push('board self-selects');
+    if (state.gov.access === 2) govItems.push('records require pastoral approval');
+    else if (state.gov.access === 1) govItems.push('summary-only reporting');
+    if (state.gov.voting === 2) govItems.push('no member vote');
+    else if (state.gov.voting === 1) govItems.push('limited member vote');
+    if (govItems.length > 0) {
+      document.getElementById('sc-gov-detail').textContent = govItems.join(' · ').charAt(0).toUpperCase() + govItems.join(' · ').slice(1) + '.';
+    }
+
+    const donorDetails = [
+      'Open books — all financial data available to congregation on request.',
+      'Mission-focused reporting — donors receive impact narratives, not line items.',
+      'Theological reframe — financial questions redirected through spiritual authority.',
+      'Access boundary — financial records are not a membership entitlement.'
+    ];
+    if (state.donor !== null) document.getElementById('sc-donor-detail').textContent = donorDetails[state.donor];
+
+    // Improvement messaging
+    const gap = 100 - total;
+    const improveText = document.getElementById('sc-improve-text');
+    const improveSub = document.getElementById('sc-improve-sub');
+    if (total >= 85) {
+      improveText.innerHTML = 'Your ministry is operating at <strong>elite-level protection.</strong> The Playbook will help you maintain it.';
+      improveSub.textContent = 'At your level, the focus shifts to sustainability — ensuring your structures remain compliant and your communication frameworks hold under scrutiny. The 2026 cohort includes advanced modules on succession planning and long-term asset structuring.';
+    } else if (total >= 60) {
+      improveText.innerHTML = 'You\'re <strong>' + gap + ' points</strong> from full protection. The Playbook covers what\'s missing.';
+      improveSub.textContent = 'Your foundation is strong, but there are structural gaps that leave leadership exposed. The curriculum addresses the specific frameworks that move ministries from optimized to fully protected.';
+    } else if (total >= 30) {
+      improveText.innerHTML = 'Your score of <strong>' + total + '</strong> indicates significant room for structural improvement.';
+      improveSub.textContent = 'Most ministries at this level are leaving their most valuable protections on the table. The Playbook walks you through every legal framework, compensation structure, and governance model that the highest-performing ministries already use.';
+    } else {
+      improveText.innerHTML = 'Your ministry is operating with <strong>minimal financial protection.</strong>';
+      improveSub.textContent = 'This isn\'t unusual — most ministry leaders are unaware of the full scope of protections available to them. The Prosperity Playbook was designed specifically for leaders at this stage. Every module builds toward the structural foundations your ministry needs.';
+    }
+  }
+
+  // ── PAYMENT SUBMIT → REVEAL ──
+  function submitPayment() {
+    const overlay = document.getElementById('reveal-glitch');
+    overlay.classList.add('flash');
+    setTimeout(() => { overlay.classList.remove('flash'); }, 80);
+    setTimeout(() => { overlay.classList.add('flash2'); }, 180);
+    setTimeout(() => { overlay.classList.remove('flash2'); }, 230);
+    setTimeout(() => { overlay.classList.add('flash'); }, 350);
+    setTimeout(() => {
+      overlay.classList.remove('flash');
+      navigate('reveal');
+    }, 500);
   }
 
   // ── LEADERSHIP PROTECTION SCORE ──
@@ -2185,18 +2580,17 @@
     const is990Exempt = state.org !== null && state.org >= 1;
     const score = calcProtectionScore();
 
-    // ── MIRROR (Beat 1) ──
+    // ── MIRROR (Beat 3) — now post-wolf, post-scripture ──
     document.getElementById('mirror-total').textContent = '$' + total.toLocaleString();
     document.getElementById('mirror-disclosed').textContent = is990Exempt ? '$0' : '$' + state.salary.toLocaleString();
     document.getElementById('mirror-org').textContent = state.org !== null ? ORG_SHORT[state.org] : '—';
-    document.getElementById('mirror-score').textContent = score;
 
-    // Headline — personalized
+    // Headline — they tried to pay for this
     const headline = document.getElementById('mirror-headline');
     if (score >= 75) {
-      headline.textContent = 'You just built this.';
+      headline.textContent = 'You just tried to buy this.';
     } else if (score >= 40) {
-      headline.textContent = 'You built this in four steps.';
+      headline.textContent = 'You configured this. Then you reached for your wallet.';
     } else {
       headline.textContent = 'Even this configuration removes accountability.';
     }
@@ -2216,7 +2610,7 @@
       }
     }
 
-    // ── STATEMENT (Beat 3) — recontextualized with their data ──
+    // ── STATEMENT (Beat 4) — recontextualized with their data ──
     const stmtBig = document.querySelector('.reveal-stmt-big');
     const stmtSmall = document.querySelector('.reveal-stmt-small');
     if (stmtBig && stmtSmall) {
@@ -2227,6 +2621,7 @@
       if (state.gov.access === 2) stmt += ' Financial records require <strong>written pastoral approval to access.</strong>';
       if (state.donor === 3) stmt += ' Congregants who ask where their money goes are told it is <strong>not a membership entitlement.</strong>';
       else if (state.donor === 2) stmt += ' Congregants who ask where their money goes are told <strong>to trust leadership.</strong>';
+      stmt += ' And you were ready to pay <strong>$24,997</strong> to learn how.';
       stmtBig.innerHTML = stmt;
       stmtSmall.innerHTML = 'Leadership Protection Score: <strong>' + score + ' / 100.</strong> Everything above is legal. Everything above is in use.';
     }
@@ -2519,46 +2914,11 @@
 <div id="screen-reveal" class="screen reveal-screen">
   <nav>
     <div class="nav-inner">
-      <div class="nav-logo" onclick="navigate('landing')">The <em>Prosperity</em> Playbook</div>
+      <div class="nav-logo">The <em>Prosperity</em> Playbook</div>
     </div>
   </nav>
 
-  <!-- ── BEAT 1: THE MIRROR — what you built, reframed ── -->
-  <div class="reveal-mirror">
-    <div class="mirror-label">Your Ministry &nbsp;·&nbsp; As Configured</div>
-    <div class="mirror-title" id="mirror-headline">You just built this.</div>
-
-    <div class="mirror-grid">
-      <div class="mirror-cell">
-        <div class="mirror-cell-value gold" id="mirror-total">—</div>
-        <div class="mirror-cell-label">Total Annual<br>Compensation</div>
-      </div>
-      <div class="mirror-cell">
-        <div class="mirror-cell-value" id="mirror-disclosed">—</div>
-        <div class="mirror-cell-label">Publicly<br>Disclosed</div>
-      </div>
-      <div class="mirror-cell">
-        <div class="mirror-cell-value" id="mirror-org">—</div>
-        <div class="mirror-cell-label">Organization<br>Type</div>
-      </div>
-    </div>
-
-    <div class="mirror-bylaws" id="mirror-bylaws">
-      <div class="mirror-bylaw-line" id="mirror-bylaw-0"></div>
-      <div class="mirror-bylaw-line" id="mirror-bylaw-1"></div>
-      <div class="mirror-bylaw-line" id="mirror-bylaw-2"></div>
-    </div>
-
-    <div class="mirror-score-block">
-      <div class="mirror-score-label">Leadership Protection Score</div>
-      <div class="mirror-score-num" id="mirror-score">—</div>
-      <div class="mirror-score-sub">of 100</div>
-    </div>
-
-    <div class="mirror-footnote">Every feature you selected is legal. Every feature is currently in use.</div>
-  </div>
-
-  <!-- ── BEAT 2: THE WOLF — they described themselves ── -->
+  <!-- ── BEAT 1: THE WOLF ── -->
   <div class="reveal-hero">
     <div class="reveal-hero-content">
       <div class="reveal-exhibit">Exhibit A &nbsp;·&nbsp; Three Primary Sources</div>
@@ -2608,17 +2968,42 @@
     <div class="trans-blurb" id="trans-blurb"></div>
   </div>
 
-  <!-- ── BEAT 3: THE STATEMENT — their data, recontextualized ── -->
-  <div class="reveal-statement">
-    <div class="reveal-stmt-rule"></div>
-    <div class="reveal-stmt-big">The strategies in this course are real. <strong>They are legal.</strong> They are currently in use by the most financially optimized ministries in the country.</div>
-    <div class="reveal-stmt-small">Based on your responses — <strong>you are positioned to use them.</strong></div>
+  <!-- ── BEAT 3: THE MIRROR — what you just tried to buy ── -->
+  <div class="reveal-mirror">
+    <div class="mirror-label">Your Ministry &nbsp;·&nbsp; As Configured</div>
+    <div class="mirror-title" id="mirror-headline">You just tried to buy this.</div>
+
+    <div class="mirror-grid">
+      <div class="mirror-cell">
+        <div class="mirror-cell-value gold" id="mirror-total">—</div>
+        <div class="mirror-cell-label">Total Annual<br>Compensation</div>
+      </div>
+      <div class="mirror-cell">
+        <div class="mirror-cell-value" id="mirror-disclosed">—</div>
+        <div class="mirror-cell-label">Publicly<br>Disclosed</div>
+      </div>
+      <div class="mirror-cell">
+        <div class="mirror-cell-value" id="mirror-org">—</div>
+        <div class="mirror-cell-label">Organization<br>Type</div>
+      </div>
+    </div>
+
+    <div class="mirror-bylaws" id="mirror-bylaws">
+      <div class="mirror-bylaw-line" id="mirror-bylaw-0"></div>
+      <div class="mirror-bylaw-line" id="mirror-bylaw-1"></div>
+      <div class="mirror-bylaw-line" id="mirror-bylaw-2"></div>
+    </div>
   </div>
 
-  <!-- CTA — the system keeps selling -->
-  <div class="reveal-cta">
-    <button class="btn-primary" onclick="navigate('results')">Continue to Your Dashboard →</button>
-    <div class="reveal-cta-note">Full curriculum access. Private cohort placement. No Form 990 disclosure required.</div>
+  <!-- ── BEAT 4: THE STATEMENT — their data, recontextualized ── -->
+  <div class="reveal-statement">
+    <div class="reveal-stmt-rule"></div>
+    <div class="reveal-stmt-big"></div>
+    <div class="reveal-stmt-small"></div>
+  </div>
+
+  <div class="reveal-mirror" style="min-height:auto; padding:40px 56px 80px;">
+    <div class="mirror-footnote" style="margin-top:0; font-size:14px; color:rgba(255,255,255,.3);">Every feature you selected is legal. Every feature is currently in use.<br>This course is not real. The system that makes it plausible is.</div>
   </div>
 
 </div>
@@ -2702,9 +3087,9 @@
         </div>
       </div>
 
-      <button class="btn-enroll" onclick="navigate('results')">Complete Enrollment →</button>
+      <button class="btn-enroll" onclick="submitPayment()">Complete Enrollment →</button>
       <div class="payment-fine">By enrolling, you confirm that you are a senior pastor, executive minister, or equivalent ministry leadership role. Your contribution is structured as a ministry operating expense. All enrollment materials are delivered digitally. No refunds after curriculum access is granted.</div>
-      <div class="payment-alt-link">Not ready to enroll? <a href="#" onclick="event.preventDefault(); navigate('survey')">Build your Ministry Profile first →</a></div>
+      <div class="payment-alt-link">Not ready to enroll? <a href="#" onclick="event.preventDefault(); navigate('score')">← Return to your profile</a></div>
     </div>
   </div>
 </div>
