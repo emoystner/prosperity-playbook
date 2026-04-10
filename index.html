@@ -842,6 +842,58 @@
   </style>
 </head>
 <body>
+<!-- ── PIN LOCK OVERLAY ── -->
+<div id="pin-lock" style="position:fixed;inset:0;z-index:99999;background:#0C0B09;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Inter',sans-serif;">
+  <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:#C4A35A;font-style:italic;margin-bottom:8px;">The Prosperity Playbook</div>
+  <div style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#7A7468;margin-bottom:40px;">2026 Edition · Private Access</div>
+  <div style="display:flex;gap:12px;margin-bottom:24px;" id="pin-digits">
+    <input type="tel" maxlength="1" class="pin-input" autofocus>
+    <input type="tel" maxlength="1" class="pin-input">
+    <input type="tel" maxlength="1" class="pin-input">
+    <input type="tel" maxlength="1" class="pin-input">
+  </div>
+  <div id="pin-error" style="font-size:12px;color:#a04040;height:20px;"></div>
+</div>
+<style>
+  .pin-input {
+    width:52px;height:64px;background:#141210;border:1.5px solid rgba(255,255,255,.1);border-radius:12px;
+    color:#F0EBE1;font-family:'Inter',sans-serif;font-size:24px;font-weight:700;text-align:center;
+    outline:none;transition:border-color .2s;caret-color:#C4A35A;
+  }
+  .pin-input:focus { border-color:#C4A35A; }
+  .pin-input.error { border-color:#a04040; animation: pin-shake .4s ease; }
+  @keyframes pin-shake {
+    0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)}
+  }
+</style>
+<script>
+(function(){
+  const PIN = '0865';
+  const inputs = document.querySelectorAll('.pin-input');
+  inputs.forEach((inp, i) => {
+    inp.addEventListener('input', () => {
+      inp.value = inp.value.replace(/\D/g,'');
+      if (inp.value && i < 3) inputs[i+1].focus();
+      const code = Array.from(inputs).map(x=>x.value).join('');
+      if (code.length === 4) {
+        if (code === PIN) {
+          document.getElementById('pin-lock').style.opacity = '0';
+          document.getElementById('pin-lock').style.transition = 'opacity .4s ease';
+          setTimeout(() => document.getElementById('pin-lock').remove(), 400);
+        } else {
+          document.getElementById('pin-error').textContent = 'Incorrect PIN';
+          inputs.forEach(x => { x.classList.add('error'); x.value = ''; });
+          inputs[0].focus();
+          setTimeout(() => inputs.forEach(x => x.classList.remove('error')), 400);
+        }
+      }
+    });
+    inp.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !inp.value && i > 0) inputs[i-1].focus();
+    });
+  });
+})();
+</script>
 
 <!-- ═══════════════════════════════════════════════════
      SCREEN 1 · LANDING
